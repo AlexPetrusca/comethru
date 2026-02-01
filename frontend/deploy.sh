@@ -66,6 +66,10 @@ if ! command -v helm &> /dev/null; then
   exit 1
 fi
 
+# Update Helm dependencies
+echo "Updating Helm dependencies..."
+helm dependency update ../comethru-chart
+
 # Deploy using Helm
 RELEASE_NAME="comethru-frontend-$ENVIRONMENT"
 
@@ -85,6 +89,16 @@ else
     --create-namespace
 fi
 
+echo "Waiting for ingress controller to be ready..."
+kubectl wait --for=condition=ready pod -l app.kubernetes.io/name=ingress-nginx,app.kubernetes.io/component=controller -n $NAMESPACE --timeout=180s
+
+# Force a rollout restart to ensure the new image is used
+echo "Restarting deployment to pick up new image..."
+kubectl rollout restart deployment/$(basename $RELEASE_NAME) -n $NAMESPACE
+
+# Wait for the rollout to complete
+kubectl rollout status deployment/$(basename $RELEASE_NAME) -n $NAMESPACE
+
 echo "Deployment completed!"
 echo "Environment: $ENVIRONMENT"
 echo "Image: alexpetrusca/comethru-frontend:$IMAGE_TAG"
@@ -93,3 +107,18 @@ echo "Release: $RELEASE_NAME"
 
 # Show deployment status
 kubectl get pods -n $NAMESPACE
+kubectl get svc -n $NAMESPACE
+kubectl get ingress -n $NAMESPACE
+
+# Also show ingress controller status
+echo ""
+echo "Ingress Controller Status:"
+kubectl get pods -n $NAMESPACE -l app.kubernetes.io/name=ingress-nginx,app.kubernetes.io/component=controller
+
+echo ""
+echo "Access your service at: http://localhost:30000"
+echo ""
+echo "Note: If using Minikube, you may need to run:"
+echo "minikube tunnel"
+echo "in another terminal to expose LoadBalancer services."
+echo ""

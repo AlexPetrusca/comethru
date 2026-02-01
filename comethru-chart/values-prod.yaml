@@ -1,0 +1,35 @@
+# Custom values for the Comethru frontend deployment
+frontend:
+  image: "alexpetrusca/comethru-frontend"  # Your Docker Hub image
+  imageTag: "v1.0.0"  # Replace with your actual image tag
+
+# Resource limits for production
+resources:
+  limits:
+    cpu: 100m
+    memory: 128Mi
+  requests:
+    cpu: 50m
+    memory: 64Mi
+
+# Service configuration
+service:
+  type: ClusterIP  # Using ClusterIP since we'll access via ingress
+  port: 80
+  targetPort: 3000
+
+# Number of replicas for high availability
+replicaCount: 2
+
+# Configuration for the nginx ingress controller in production
+ingress-nginx:
+  enabled: true
+  controller:
+    namespaceOverride: "comethru"  # Deploy ingress controller to comethru namespace
+    service:
+      type: LoadBalancer  # Use LoadBalancer in production for external access
+      # In production, you typically don't set specific nodePorts
+    config:
+      use-proxy-protocol: "false"
+      use-forwarded-headers: "true"
+      compute-full-forwarded-for: "true"
