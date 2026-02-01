@@ -92,13 +92,6 @@ fi
 echo "Waiting for ingress controller to be ready..."
 kubectl wait --for=condition=ready pod -l app.kubernetes.io/name=ingress-nginx,app.kubernetes.io/component=controller -n $NAMESPACE --timeout=180s
 
-# Force a rollout restart to ensure the new image is used
-echo "Restarting deployment to pick up new image..."
-kubectl rollout restart deployment/$(basename $RELEASE_NAME) -n $NAMESPACE
-
-# Wait for the rollout to complete
-kubectl rollout status deployment/$(basename $RELEASE_NAME) -n $NAMESPACE
-
 echo "Deployment completed!"
 echo "Environment: $ENVIRONMENT"
 echo "Image: alexpetrusca/comethru-frontend:$IMAGE_TAG"
