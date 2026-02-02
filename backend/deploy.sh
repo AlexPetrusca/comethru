@@ -46,36 +46,33 @@ docker build -t $IMAGE_NAME .
 echo "Pushing image to Docker Hub..."
 docker push $IMAGE_NAME
 
-echo "Updating Helm dependencies..."
-helm repo update
+echo "Deploying backend to Kubernetes namespace: comethru"
 
-echo "Deploying to Kubernetes namespace: comethru"
-
-# Deploy using Helm
+# Deploy using Helm with the main chart
 if [ "$ENVIRONMENT" == "prod" ]; then
-  helm upgrade --install comethru-backend-dev ./comethru-backend-chart \
+  helm upgrade --install comethru-frontend-dev ../comethru-chart \
     --namespace comethru \
-    --create-namespace \
-    --set image.repository=alexpetrusca/comethru-backend \
-    --set image.tag=$TAG \
-    --set image.pullPolicy=Always \
-    --set replicaCount=1 \
-    --set service.type=ClusterIP \
-    --set service.port=80 \
-    --set service.targetPort=8080 \
+    --set backend.enabled=true \
+    --set backend.image=alexpetrusca/comethru-backend \
+    --set backend.imageTag=$TAG \
+    --set backend.pullPolicy=Always \
+    --set backend.replicaCount=1 \
+    --set backend.service.type=ClusterIP \
+    --set backend.service.port=80 \
+    --set backend.service.targetPort=8080 \
     --wait
 else
   # For dev environment
-  helm upgrade --install comethru-backend-dev ./comethru-backend-chart \
+  helm upgrade --install comethru-frontend-dev ../comethru-chart \
     --namespace comethru \
-    --create-namespace \
-    --set image.repository=alexpetrusca/comethru-backend \
-    --set image.tag=$TAG \
-    --set image.pullPolicy=Always \
-    --set replicaCount=1 \
-    --set service.type=ClusterIP \
-    --set service.port=80 \
-    --set service.targetPort=8080 \
+    --set backend.enabled=true \
+    --set backend.image=alexpetrusca/comethru-backend \
+    --set backend.imageTag=$TAG \
+    --set backend.pullPolicy=Always \
+    --set backend.replicaCount=1 \
+    --set backend.service.type=ClusterIP \
+    --set backend.service.port=80 \
+    --set backend.service.targetPort=8080 \
     --wait
 fi
 

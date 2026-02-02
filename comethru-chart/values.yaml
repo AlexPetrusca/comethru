@@ -115,3 +115,20 @@ nginx:
     port: 80
   upstreamService: "comethru-frontend"  # The service name of your frontend app
   upstreamPort: 80  # The port on which your frontend service is exposed
+
+# Backend service configuration
+backend:
+  enabled: false
+  image: "alexpetrusca/comethru-backend"
+  imageTag: "latest"
+  pullPolicy: Always
+  replicaCount: 1
+  containerPort: 8080
+  servicePort: 80
+  targetPort: 8080
+  autoscaling:
+    enabled: false
+  service:
+    type: ClusterIP
+    port: 80
+    targetPort: 8080

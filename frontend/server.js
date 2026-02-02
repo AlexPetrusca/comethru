@@ -138,8 +138,8 @@ app.get('/api/time', async (req, res) => {
   try {
     // In a real deployment, this would call the backend service
     // For now, we'll return a mock response since the backend may not be running
-    // When deployed in Kubernetes, use the service name: http://comethru-backend.comethru.svc.cluster.local:80/api/time
-    const BACKEND_HOST = process.env.BACKEND_HOST || 'comethru-backend.comethru.svc.cluster.local';
+    // When deployed in Kubernetes, use the service name: http://comethru-frontend-backend.comethru.svc.cluster.local:80/api/time
+    const BACKEND_HOST = process.env.BACKEND_HOST || 'comethru-frontend-backend.comethru.svc.cluster.local';
     const BACKEND_PORT = process.env.BACKEND_PORT || '80';
     const BACKEND_PATH = '/api/time';
 
