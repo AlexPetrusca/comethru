@@ -12,6 +12,7 @@ spec:
   selector:
     matchLabels:
       {{- include "comethru-chart.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/component: frontend
   template:
     metadata:
       {{- with .Values.podAnnotations }}
@@ -20,6 +21,7 @@ spec:
       {{- end }}
       labels:
         {{- include "comethru-chart.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/component: frontend
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:

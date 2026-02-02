@@ -112,3 +112,14 @@ ingress-nginx:
       use-proxy-protocol: "false"
       use-forwarded-headers: "true"
       compute-full-forwarded-for: "true"
+
+# Configuration for the nginx reverse proxy
+nginx:
+  enabled: true
+  image: nginx:alpine
+  replicaCount: 1
+  service:
+    type: ClusterIP
+    port: 80
+  upstreamService: "comethru-frontend"  # The service name of your frontend app
+  upstreamPort: 80  # The port on which your frontend service is exposed

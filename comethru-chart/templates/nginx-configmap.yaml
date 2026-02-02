@@ -1,0 +1,39 @@
+{{- if .Values.nginx.enabled -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "comethru-chart.fullname" . }}-nginx-config
+  namespace: comethru
+  labels:
+    {{- include "comethru-chart.labels" . | nindent 4 }}
+data:
+  nginx.conf: |
+    events {
+        worker_connections 1024;
+    }
+
+    http {
+        # Use DNS resolver for Kubernetes service discovery
+        resolver kube-dns.kube-system.svc.cluster.local valid=5s;
+
+        server {
+            listen 80;
+
+            location / {
+                # Use a variable to force DNS resolution on every request
+                # Use the fully qualified domain name for the service
+                set $backend "http://{{ .Values.nginx.upstreamService }}.{{ .Release.Namespace }}.svc.cluster.local:{{ .Values.nginx.upstreamPort }}";
+                proxy_pass $backend;
+                proxy_set_header Host $host;
+                proxy_set_header X-Real-IP $remote_addr;
+                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+                proxy_set_header X-Forwarded-Proto $scheme;
+
+                # Increase timeouts to handle slow connections
+                proxy_connect_timeout 10s;
+                proxy_send_timeout 30s;
+                proxy_read_timeout 30s;
+            }
+        }
+    }
+{{- end }}

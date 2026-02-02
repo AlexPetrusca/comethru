@@ -1,17 +1,19 @@
+{{- if .Values.nginx.enabled -}}
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "comethru-chart.fullname" . }}
+  name: {{ include "comethru-chart.fullname" . }}-nginx
   namespace: comethru
   labels:
     {{- include "comethru-chart.labels" . | nindent 4 }}
 spec:
-  type: {{ .Values.service.type }}
+  type: {{ .Values.nginx.service.type }}
   ports:
-    - port: {{ .Values.service.port }}
-      targetPort: {{ .Values.frontend.containerPort }}
+    - port: {{ .Values.nginx.service.port }}
+      targetPort: 80
       protocol: TCP
       name: http
   selector:
     {{- include "comethru-chart.selectorLabels" . | nindent 4 }}
-    app.kubernetes.io/component: frontend
+    app.kubernetes.io/component: nginx
+{{- end }}

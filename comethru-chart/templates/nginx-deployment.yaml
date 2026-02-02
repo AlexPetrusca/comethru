@@ -1,0 +1,39 @@
+{{- if .Values.nginx.enabled -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "comethru-chart.fullname" . }}-nginx
+  namespace: comethru
+  labels:
+    {{- include "comethru-chart.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.nginx.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "comethru-chart.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/component: nginx
+  template:
+    metadata:
+      labels:
+        {{- include "comethru-chart.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/component: nginx
+    spec:
+      containers:
+        - name: nginx
+          image: {{ .Values.nginx.image }}
+          ports:
+            - containerPort: 80
+          volumeMounts:
+            - name: nginx-config
+              mountPath: /etc/nginx/nginx.conf
+              subPath: nginx.conf
+            # Mount an empty directory to overwrite the conf.d directory
+            - name: empty-dir
+              mountPath: /etc/nginx/conf.d
+      volumes:
+        - name: nginx-config
+          configMap:
+            name: {{ include "comethru-chart.fullname" . }}-nginx-config
+        - name: empty-dir
+          emptyDir: {}
+{{- end }}

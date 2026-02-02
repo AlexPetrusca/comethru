@@ -41,12 +41,12 @@ spec:
             backend:
               {{- if semverCompare ">=1.19-0" $kubeVersion }}
               service:
-                name: {{ $fullName }}
+                name: {{ $fullName }}-nginx
                 port:
-                  number: {{ $svcPort }}
+                  number: 80
               {{- else }}
-              serviceName: {{ $fullName }}
-              servicePort: {{ $svcPort }}
+              serviceName: {{ $fullName }}-nginx
+              servicePort: 80
               {{- end }}
           {{- end }}
     {{- end }}
