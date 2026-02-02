@@ -68,7 +68,7 @@ fi
 
 # Update Helm dependencies
 echo "Updating Helm dependencies..."
-helm dependency update ../comethru-chart
+helm dependency build ../comethru-chart
 
 # Deploy using Helm
 RELEASE_NAME="comethru-frontend-$ENVIRONMENT"
@@ -107,11 +107,3 @@ kubectl get ingress -n $NAMESPACE
 echo ""
 echo "Ingress Controller Status:"
 kubectl get pods -n $NAMESPACE -l app.kubernetes.io/name=ingress-nginx,app.kubernetes.io/component=controller
-
-echo ""
-echo "Access your service at: http://localhost:30000"
-echo ""
-echo "Note: If using Minikube, you may need to run:"
-echo "minikube tunnel"
-echo "in another terminal to expose LoadBalancer services."
-echo ""
