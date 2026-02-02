@@ -93,12 +93,10 @@ ingress-nginx:
   controller:
     namespaceOverride: "comethru"  # Deploy ingress controller to comethru namespace
     service:
-      type: NodePort
-      # Expose the ingress controller on a valid NodePort for local access
-      # NodePort range is 30000-32767
-      nodePorts:
-        http: 30000  # Using the lowest valid NodePort
-        https: 30443
+      type: LoadBalancer
+      ports:
+        http: 80  # Change to whatever port you want
+        https: 443  # Also change HTTPS if needed
     # Enable hostNetwork to bind directly to the host's network
     hostNetwork: false
     # Additional configuration for local development
