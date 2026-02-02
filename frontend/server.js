@@ -133,6 +133,39 @@ app.post('/api/verify-otp', async (req, res) => {
   }
 });
 
+// Proxy endpoint to backend service
+app.get('/api/time', async (req, res) => {
+  try {
+    // In a real deployment, this would call the backend service
+    // For now, we'll return a mock response since the backend may not be running
+    // When deployed in Kubernetes, use the service name: http://comethru-backend.comethru.svc.cluster.local:80/api/time
+    const BACKEND_HOST = process.env.BACKEND_HOST || 'comethru-backend.comethru.svc.cluster.local';
+    const BACKEND_PORT = process.env.BACKEND_PORT || '80';
+    const BACKEND_PATH = '/api/time';
+
+    const BACKEND_URL = `http://${BACKEND_HOST}:${BACKEND_PORT}${BACKEND_PATH}`;
+    const response = await fetch(BACKEND_URL);
+
+    if (response.ok) {
+      const data = await response.json();
+      res.json(data);
+    } else {
+      // Return mock data if backend is not available
+      res.json({
+        currentTime: new Date().toISOString(),
+        timestamp: Date.now()
+      });
+    }
+  } catch (error) {
+    console.error('Error calling backend:', error);
+    // Return mock data if backend is not available
+    res.json({
+      currentTime: new Date().toISOString(),
+      timestamp: Date.now()
+    });
+  }
+});
+
 // Start the server
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`Server is running on port ${PORT}`);

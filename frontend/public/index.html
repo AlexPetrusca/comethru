@@ -125,6 +125,11 @@
     <div id="home-screen" class="screen">
       <h2>Welcome!</h2>
       <p>You are successfully logged in.</p>
+      <div class="form-group">
+        <label for="current-time">Current Time from Backend:</label>
+        <div id="current-time">Loading...</div>
+      </div>
+      <button id="refresh-time-btn">Refresh Time</button>
       <button id="logout-btn">Logout</button>
     </div>
   </div>
@@ -330,6 +335,40 @@
         resendBtn.textContent = 'Resend Code';
       }
     });
+
+    // Get DOM elements for time functionality
+    const currentTimeDiv = document.getElementById('current-time');
+    const refreshTimeBtn = document.getElementById('refresh-time-btn');
+
+    // Function to fetch current time from backend
+    async function fetchCurrentTime() {
+      try {
+        const response = await fetch('/api/time');
+        if (response.ok) {
+          const data = await response.json();
+          currentTimeDiv.textContent = `${data.currentTime} (Unix timestamp: ${data.timestamp})`;
+        } else {
+          currentTimeDiv.textContent = 'Error fetching time';
+        }
+      } catch (error) {
+        console.error('Error fetching time:', error);
+        currentTimeDiv.textContent = 'Error fetching time';
+      }
+    }
+
+    // Refresh time button event listener
+    refreshTimeBtn.addEventListener('click', fetchCurrentTime);
+
+    // Show home screen with time update
+    function showHomeScreen() {
+      loginScreen.classList.remove('active');
+      verificationScreen.classList.remove('active');
+      homeScreen.classList.add('active');
+      clearErrors();
+
+      // Fetch and display current time from backend
+      fetchCurrentTime();
+    }
 
     // Logout
     logoutBtn.addEventListener('click', () => {
