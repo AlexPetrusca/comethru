@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "comethru-backend-chart.fullname" . }}
+  namespace: comethru
+  labels:
+    {{- include "comethru-backend-chart.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: {{ .Values.service.targetPort }}
+      protocol: TCP
+      name: http
+  selector:
+    {{- include "comethru-backend-chart.selectorLabels" . | nindent 4 }}
