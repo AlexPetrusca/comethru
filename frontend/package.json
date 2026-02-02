@@ -8,7 +8,9 @@
     "dev": "nodemon server.js"
   },
   "dependencies": {
-    "express": "^4.22.1"
+    "dotenv": "^17.2.3",
+    "express": "^4.22.1",
+    "node-fetch": "^2.7.0"
   },
   "devDependencies": {
     "nodemon": "^3.0.1"
