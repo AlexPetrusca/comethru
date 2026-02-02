@@ -22,7 +22,7 @@ data:
             location / {
                 # Use a variable to force DNS resolution on every request
                 # Use the fully qualified domain name for the service
-                set $backend "http://{{ .Values.nginx.upstreamService }}.{{ .Release.Namespace }}.svc.cluster.local:{{ .Values.nginx.upstreamPort }}";
+                set $backend "http://{{ include "comethru-chart.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local:{{ .Values.nginx.upstreamPort }}";
                 proxy_pass $backend;
                 proxy_set_header Host $host;
                 proxy_set_header X-Real-IP $remote_addr;

@@ -1,6 +1,6 @@
 apiVersion: v2
 name: comethru-chart
-description: A Helm chart for deploying the Comethru frontend application
+description: A Helm chart for deploying the Comethru application
 
 # A chart can be either an 'application' or a 'library' chart.
 #

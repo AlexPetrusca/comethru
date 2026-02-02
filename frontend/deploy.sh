@@ -71,7 +71,7 @@ echo "Updating Helm dependencies..."
 helm dependency build ../comethru-chart
 
 # Deploy using Helm
-RELEASE_NAME="comethru-frontend-$ENVIRONMENT"
+RELEASE_NAME="comethru"
 
 echo "Deploying to Kubernetes namespace: $NAMESPACE"
 if [ "$ENVIRONMENT" = "prod" ]; then
@@ -90,8 +90,8 @@ else
 fi
 
 echo "Restarting deployment to pull latest image..."
-kubectl rollout restart deployment/comethru-frontend -n $NAMESPACE
-kubectl rollout status deployment/comethru-frontend -n $NAMESPACE --timeout=300s
+kubectl rollout restart deployment/comethru -n $NAMESPACE
+kubectl rollout status deployment/comethru -n $NAMESPACE --timeout=300s
 
 echo "Waiting for ingress controller to be ready..."
 kubectl wait --for=condition=ready pod -l app.kubernetes.io/name=ingress-nginx,app.kubernetes.io/component=controller -n $NAMESPACE --timeout=180s

@@ -50,7 +50,7 @@ echo "Deploying backend to Kubernetes namespace: comethru"
 
 # Deploy using Helm with the main chart
 if [ "$ENVIRONMENT" == "prod" ]; then
-  helm upgrade --install comethru-frontend-dev ../comethru-chart \
+  helm upgrade --install comethru ../comethru-chart \
     --namespace comethru \
     --set backend.enabled=true \
     --set backend.image=alexpetrusca/comethru-backend \
@@ -63,7 +63,7 @@ if [ "$ENVIRONMENT" == "prod" ]; then
     --wait
 else
   # For dev environment
-  helm upgrade --install comethru-frontend-dev ../comethru-chart \
+  helm upgrade --install comethru ../comethru-chart \
     --namespace comethru \
     --set backend.enabled=true \
     --set backend.image=alexpetrusca/comethru-backend \

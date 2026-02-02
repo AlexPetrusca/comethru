@@ -5,7 +5,7 @@
 replicaCount: 1
 imagePullSecrets: []
 nameOverride: ""
-fullnameOverride: "comethru-frontend"
+fullnameOverride: "comethru"
 
 serviceAccount:
   # Specifies whether a service account should be created
@@ -113,7 +113,7 @@ nginx:
   service:
     type: ClusterIP
     port: 80
-  upstreamService: "comethru-frontend"  # The service name of your frontend app
+  upstreamService: "comethru"  # The service name of your frontend app
   upstreamPort: 80  # The port on which your frontend service is exposed
 
 # Backend service configuration
