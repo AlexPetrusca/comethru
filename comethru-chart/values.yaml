@@ -132,3 +132,19 @@ backend:
     type: ClusterIP
     port: 80
     targetPort: 8080
+
+# PostgreSQL configuration
+postgresql:
+  enabled: false
+  auth:
+    postgresPassword: "comethru-postgres-password" # todo: remove later - no password in code
+    database: "comethru"
+  architecture: standalone
+  primary:
+    persistence:
+      enabled: true
+      size: 8Gi
+      storageClass: ""
+    service:
+      ports:
+        postgresql: 5432

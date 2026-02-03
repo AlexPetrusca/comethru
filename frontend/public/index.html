@@ -126,7 +126,7 @@
       <h2>Welcome!</h2>
       <p>You are successfully logged in.</p>
       <div class="form-group">
-        <label for="current-time">Current Time from Backend:</label>
+        <label for="current-time">Current Time:</label>
         <div id="current-time">Loading...</div>
       </div>
       <button id="refresh-time-btn">Refresh Time</button>
@@ -346,7 +346,7 @@
         const response = await fetch('/api/time');
         if (response.ok) {
           const data = await response.json();
-          currentTimeDiv.textContent = `${data.currentTime} (Unix timestamp: ${data.timestamp})`;
+          currentTimeDiv.textContent = `${data.currentTime}`;
         } else {
           currentTimeDiv.textContent = 'Error fetching time';
         }

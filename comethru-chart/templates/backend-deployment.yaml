@@ -42,6 +42,20 @@ spec:
             - name: http
               containerPort: {{ .Values.backend.containerPort }}
               protocol: TCP
+          env:
+            - name: DB_HOST
+              value: "{{ include "comethru-chart.fullname" . }}-postgresql"
+            - name: DB_PORT
+              value: "5432"
+            - name: DB_USER
+              value: "postgres"
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: "{{ include "comethru-chart.fullname" . }}-postgresql"
+                  key: postgres-password
+            - name: DB_NAME
+              value: "comethru"
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}

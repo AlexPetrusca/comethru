@@ -29,6 +29,7 @@ helm upgrade --install comethru ../comethru-chart \
   --set backend.service.type=ClusterIP \
   --set backend.service.port=80 \
   --set backend.service.targetPort=8080 \
+  --set postgresql.enabled=true \
   --wait
 
 echo "Deployment completed!"
