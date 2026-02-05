@@ -126,7 +126,7 @@
       <h2>Welcome!</h2>
       <p>You are successfully logged in.</p>
       <div class="form-group">
-        <label for="current-time">Current Time:</label>
+        <label for="current-time">Current Time from Backend:</label>
         <div id="current-time">Loading...</div>
       </div>
       <button id="refresh-time-btn">Refresh Time</button>
@@ -151,13 +151,25 @@
 
     // Check if user is already logged in
     window.addEventListener('DOMContentLoaded', () => {
-      const sessionToken = getCookie('session_token');
-      if (sessionToken) {
-        showHomeScreen();
-      } else {
+      // We don't need to check for session_token cookie anymore since backend handles auth via cookies
+      // Just check if user is already authenticated by making a request to a protected endpoint
+      checkAuthStatus();
+    });
+
+    // Function to check if user is already authenticated
+    async function checkAuthStatus() {
+      try {
+        const response = await fetch('/api/time'); // This will return 401 if not authenticated
+        if (response.ok) {
+          showHomeScreen();
+        } else {
+          showLoginScreen();
+        }
+      } catch (error) {
+        // If there's a network error, assume user is not logged in
         showLoginScreen();
       }
-    });
+    }
 
     // Show login screen
     function showLoginScreen() {
@@ -181,6 +193,9 @@
       verificationScreen.classList.remove('active');
       homeScreen.classList.add('active');
       clearErrors();
+
+      // Fetch and display current time from backend
+      fetchCurrentTime();
     }
 
     // Clear error messages
@@ -228,7 +243,7 @@
         sendOtpBtn.disabled = true;
         sendOtpBtn.textContent = 'Sending...';
 
-        const response = await fetch('/api/send-otp', {
+        const response = await fetch('/auth/send_otp', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -236,12 +251,11 @@
           body: JSON.stringify({ phoneNumber })
         });
 
-        const data = await response.json();
-
         if (response.ok) {
           showVerificationScreen();
         } else {
-          loginError.textContent = data.error || 'Failed to send OTP';
+          const data = await response.json();
+          loginError.textContent = data.message || 'Failed to send OTP';
         }
       } catch (error) {
         loginError.textContent = 'Network error. Please try again.';
@@ -251,7 +265,7 @@
       }
     });
 
-    // Verify OTP
+    // Verify OTP (Login)
     verifyBtn.addEventListener('click', async () => {
       const phoneNumber = phoneNumberInput.value.trim();
       const verificationCode = verificationCodeInput.value.trim();
@@ -270,27 +284,25 @@
         verifyBtn.disabled = true;
         verifyBtn.textContent = 'Verifying...';
 
-        const response = await fetch('/api/verify-otp', {
+        const response = await fetch('/auth/login', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
             phoneNumber,
-            verificationCode
+            code: verificationCode
           })
         });
 
-        const data = await response.json();
-
-        if (response.ok && data.valid) {
-          setCookie('session_token', data.sessionToken, 7); // 7 days
+        if (response.ok) {
           verifySuccess.textContent = 'Verification successful!';
           setTimeout(() => {
             showHomeScreen();
           }, 1000);
         } else {
-          verifyError.textContent = data.error || 'Invalid verification code';
+          const data = await response.json();
+          verifyError.textContent = data.message || 'Invalid verification code';
         }
       } catch (error) {
         verifyError.textContent = 'Network error. Please try again.';
@@ -313,7 +325,7 @@
         resendBtn.disabled = true;
         resendBtn.textContent = 'Sending...';
 
-        const response = await fetch('/api/send-otp', {
+        const response = await fetch('/auth/send_otp', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -321,12 +333,11 @@
           body: JSON.stringify({ phoneNumber })
         });
 
-        const data = await response.json();
-
         if (response.ok) {
           verifySuccess.textContent = 'OTP sent successfully!';
         } else {
-          verifyError.textContent = data.error || 'Failed to resend OTP';
+          const data = await response.json();
+          verifyError.textContent = data.message || 'Failed to resend OTP';
         }
       } catch (error) {
         verifyError.textContent = 'Network error. Please try again.';
@@ -346,7 +357,7 @@
         const response = await fetch('/api/time');
         if (response.ok) {
           const data = await response.json();
-          currentTimeDiv.textContent = `${data.currentTime}`;
+          currentTimeDiv.textContent = `${data.currentTime} (Unix timestamp: ${data.timestamp})`;
         } else {
           currentTimeDiv.textContent = 'Error fetching time';
         }
@@ -359,23 +370,32 @@
     // Refresh time button event listener
     refreshTimeBtn.addEventListener('click', fetchCurrentTime);
 
-    // Show home screen with time update
-    function showHomeScreen() {
-      loginScreen.classList.remove('active');
-      verificationScreen.classList.remove('active');
-      homeScreen.classList.add('active');
-      clearErrors();
-
-      // Fetch and display current time from backend
-      fetchCurrentTime();
-    }
-
     // Logout
-    logoutBtn.addEventListener('click', () => {
-      deleteCookie('session_token');
-      phoneNumberInput.value = '';
-      verificationCodeInput.value = '';
-      showLoginScreen();
+    logoutBtn.addEventListener('click', async () => {
+      try {
+        const response = await fetch('/auth/logout', {
+          method: 'POST',
+        });
+
+        if (response.ok) {
+          phoneNumberInput.value = '';
+          verificationCodeInput.value = '';
+          showLoginScreen();
+        } else {
+          const data = await response.json();
+          console.error('Logout error:', data.message || 'Failed to logout');
+          // Still redirect to login screen even if logout fails
+          phoneNumberInput.value = '';
+          verificationCodeInput.value = '';
+          showLoginScreen();
+        }
+      } catch (error) {
+        console.error('Network error during logout:', error);
+        // Redirect to login screen even if network error occurs
+        phoneNumberInput.value = '';
+        verificationCodeInput.value = '';
+        showLoginScreen();
+      }
     });
   </script>
 </body>
