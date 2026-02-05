@@ -51,6 +51,7 @@ public class AuthController {
         return ResponseEntity.noContent().build();
     }
 
+    // todo: This endpoint requires Authorization
     @PostMapping("/logout")
     public ResponseEntity<Void> logout(HttpServletResponse response) {
         ResponseCookie cookie = cookieService.getEmptyAuthCookie();
