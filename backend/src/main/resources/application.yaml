@@ -1,6 +1,7 @@
 spring:
   application:
     name: backend
+
   datasource:
     url: jdbc:postgresql://localhost:5432/postgres
     username: postgres
@@ -17,3 +18,12 @@ spring:
       hibernate:
         format_sql: true
         dialect: org.hibernate.dialect.PostgreSQLDialect
+
+twilio:
+  account-sid: ${TWILIO_ACCOUNT_SID}
+  auth-token: ${TWILIO_AUTH_TOKEN}
+  service-sid: ${TWILIO_SERVICE_SID}
+
+rsa:
+  public-key: ${RSA_PUBLIC_KEY}
+  private-key: ${RSA_PRIVATE_KEY}

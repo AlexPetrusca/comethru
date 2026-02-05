@@ -10,7 +10,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
-public class TestController {
+public class TimeController {
 
     @GetMapping("/time")
     public Map<String, Object> getCurrentTime() {

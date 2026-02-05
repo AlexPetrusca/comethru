@@ -18,6 +18,9 @@ public class UserService {
     }
 
     public User createNewUser(User user) {
+        // todo: dont throw runtime exceptions here
+        //  - use your own exceptions
+        //  - make it bad request
         if (userRepository.findByPhoneNumber(user.getPhoneNumber()).isPresent()) {
             throw new RuntimeException("Phone number already registered!");
         }
