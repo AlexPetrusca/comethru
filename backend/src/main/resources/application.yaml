@@ -4,26 +4,33 @@ spring:
 
   datasource:
     url: jdbc:postgresql://localhost:5432/postgres
-    username: postgres
-    password: comethru-postgres-password
+    username: ${POSTGRES_USERNAME}
+    password: ${POSTGRES_PASSWORD}
     driver-class-name: org.postgresql.Driver
 
   jpa:
     hibernate:
-      # 'none' if you're using Option 3 (manual/init scripts)
-      # 'update' if you want Hibernate to auto-create tables for now
-      ddl-auto: update
+      ddl-auto: update  # auto-update tables
     show-sql: true
     properties:
       hibernate:
         format_sql: true
         dialect: org.hibernate.dialect.PostgreSQLDialect
 
-twilio:
-  account-sid: ${TWILIO_ACCOUNT_SID}
-  auth-token: ${TWILIO_AUTH_TOKEN}
-  service-sid: ${TWILIO_SERVICE_SID}
+integration:
+  twilio:
+    account-sid: ${TWILIO_ACCOUNT_SID}
+    auth-token: ${TWILIO_AUTH_TOKEN}
+    service-sid: ${TWILIO_SERVICE_SID}
 
-rsa:
-  public-key: ${RSA_PUBLIC_KEY}
-  private-key: ${RSA_PRIVATE_KEY}
+security:
+  auth:
+    session:
+      duration: 1h
+    cookie:
+      name: AUTH_TOKEN
+      secure: false
+      same-site: Lax
+    rsa:
+      public-key: ${RSA_PUBLIC_KEY}
+      private-key: ${RSA_PRIVATE_KEY}

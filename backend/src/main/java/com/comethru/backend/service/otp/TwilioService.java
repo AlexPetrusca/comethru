@@ -1,6 +1,6 @@
 package com.comethru.backend.service.otp;
 
-import com.comethru.backend.config.TwilioConfig;
+import com.comethru.backend.config.properties.TwilioProperties;
 import com.comethru.backend.entity.types.OtpChannel;
 import com.comethru.backend.entity.types.OtpStatus;
 import com.comethru.backend.exception.ErrorCode;
@@ -13,9 +13,9 @@ import org.springframework.stereotype.Service;
 @Service
 public class TwilioService implements OtpService {
 
-    private final TwilioConfig twilioConfig;
+    private final TwilioProperties twilioConfig;
 
-    public TwilioService(TwilioConfig twilioConfig) {
+    public TwilioService(TwilioProperties twilioConfig) {
         this.twilioConfig = twilioConfig;
     }
 
@@ -25,9 +25,8 @@ public class TwilioService implements OtpService {
 
     @Override
     public void sendOtp(String phoneNumber, OtpChannel channel) {
-        String sid = twilioConfig.getServiceSid();
         try {
-            Verification verification = Verification.creator(sid, phoneNumber, translateChannel(channel)).create();
+            Verification verification = Verification.creator(twilioConfig.serviceSid(), phoneNumber, translateChannel(channel)).create();
             if (!verification.getStatus().equals(translateStatus(OtpStatus.PENDING))) {
                 throw OtpException.providerError("Unexpected verification status: " + verification.getStatus());
             }
@@ -37,9 +36,8 @@ public class TwilioService implements OtpService {
     }
 
     public void verifyOtp(String phoneNumber, String code) {
-        String sid = twilioConfig.getServiceSid();
         try {
-            VerificationCheck verificationCheck = VerificationCheck.creator(sid)
+            VerificationCheck verificationCheck = VerificationCheck.creator(twilioConfig.serviceSid())
                     .setTo(phoneNumber)
                     .setCode(code)
                     .create();

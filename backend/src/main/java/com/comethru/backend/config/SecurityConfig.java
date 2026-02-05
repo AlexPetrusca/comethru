@@ -16,6 +16,7 @@ import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
+import org.springframework.security.oauth2.server.resource.web.authentication.BearerTokenAuthenticationFilter;
 import org.springframework.security.web.SecurityFilterChain;
 
 import java.security.interfaces.RSAPrivateKey;
@@ -26,31 +27,20 @@ public class SecurityConfig {
 
     private final RSAPublicKey publicKey;
     private final RSAPrivateKey privateKey;
+    private final JwtCookieFilter jwtCookieFilter;
 
-    public SecurityConfig(RSAPublicKey publicKey, RSAPrivateKey privateKey) {
+    public SecurityConfig(RSAPublicKey publicKey, RSAPrivateKey privateKey, JwtCookieFilter jwtCookieFilter) {
         this.publicKey = publicKey;
         this.privateKey = privateKey;
+        this.jwtCookieFilter = jwtCookieFilter;
     }
-
-//    @Bean
-//    public SecurityFilterChain securityFilterChain(HttpSecurity http) {
-//        return http
-//                .csrf(csrf -> csrf.disable())
-//                .authorizeHttpRequests(auth -> auth
-//                        .requestMatchers("/auth/**").permitAll()
-//                        .anyRequest().authenticated()
-//                )
-//                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // disable HTTP sessions
-//                .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults())) // enables "Resource Server" which automatically validates JWTs
-//                .build();
-//    }
 
     @Bean
     @Order(1)
     public SecurityFilterChain publicAuthChain(HttpSecurity http) {
         http.securityMatcher("/auth/**")
                 .csrf(csrf -> csrf.disable())
-                .authorizeHttpRequests(auth -> auth.anyRequest().permitAll());
+                .authorizeHttpRequests(auth -> auth.anyRequest().permitAll()); // no auth needed
         return http.build();
     }
 
@@ -58,9 +48,10 @@ public class SecurityConfig {
     @Order(2)
     public SecurityFilterChain apiChain(HttpSecurity http) {
         http.csrf(csrf -> csrf.disable())
-                .authorizeHttpRequests(auth -> auth.anyRequest().authenticated())
-                .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()));
+                .authorizeHttpRequests(auth -> auth.anyRequest().authenticated()) // require auth
+                .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // no sessions
+                .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults())) // verify jwt token
+                .addFilterBefore(jwtCookieFilter, BearerTokenAuthenticationFilter.class); // get jwt from cookie if present
         return http.build();
     }
 

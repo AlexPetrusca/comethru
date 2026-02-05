@@ -38,7 +38,7 @@ public class GlobalExceptionHandler {
 
         Map<String, Object> body = new HashMap<>();
         body.put("message", "Validation failed");
-        body.put("code", ErrorCode.BAD_REQUEST);
+        body.put("code", ErrorCode.BAD_REQUEST.getErrorCode());
         body.put("timestamp", LocalDateTime.now());
         body.put("details", fieldErrors);
 

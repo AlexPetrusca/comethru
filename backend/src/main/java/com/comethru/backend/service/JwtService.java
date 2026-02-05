@@ -1,37 +1,33 @@
 package com.comethru.backend.service;
 
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
+import com.comethru.backend.config.properties.SessionProperties;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
-import java.time.temporal.ChronoUnit;
-import java.util.stream.Collectors;
+import java.util.List;
 
 @Service
 public class JwtService {
 
     private final JwtEncoder encoder;
+    private final SessionProperties sessionProps;
 
-    public JwtService(JwtEncoder encoder) {
+    public JwtService(JwtEncoder encoder, SessionProperties sessionProps) {
         this.encoder = encoder;
+        this.sessionProps = sessionProps;
     }
 
-    public String generateToken(Authentication authentication) {
+    public String generateToken(String phoneNumber, List<String> authorities) {
         Instant now = Instant.now();
-
-        String scope = authentication.getAuthorities().stream()
-                .map(GrantedAuthority::getAuthority)
-                .collect(Collectors.joining(" "));
-
+        String scope = String.join(" ", authorities);
         JwtClaimsSet claims = JwtClaimsSet.builder()
                 .issuer("self")
                 .issuedAt(now)
-                .expiresAt(now.plus(1, ChronoUnit.HOURS))
-                .subject(authentication.getName())
+                .expiresAt(now.plus(sessionProps.duration()))
+                .subject(phoneNumber)
                 .claim("scope", scope)
                 .build();
 
