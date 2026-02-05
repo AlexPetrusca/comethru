@@ -1,0 +1,13 @@
+spring:
+  config:
+    activate:
+      on-profile: prod
+
+security:
+  auth:
+    cookie:
+      secure: true
+
+logging:
+  level:
+    root: INFO

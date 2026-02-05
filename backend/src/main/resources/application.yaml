@@ -34,3 +34,7 @@ security:
     rsa:
       public-key: ${RSA_PUBLIC_KEY}
       private-key: ${RSA_PRIVATE_KEY}
+
+logging:
+  level:
+    root: DEBUG
