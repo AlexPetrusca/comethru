@@ -43,6 +43,8 @@ spec:
               containerPort: {{ .Values.backend.containerPort }}
               protocol: TCP
           env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: "prod"
             - name: DB_HOST
               value: "{{ include "comethru-chart.fullname" . }}-postgresql"
             - name: DB_PORT
