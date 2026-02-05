@@ -21,6 +21,9 @@ WORKDIR /app
 # Copy the JAR file from the builder stage
 COPY --from=builder /app/target/backend-0.0.1-SNAPSHOT.jar app.jar
 
+# DON'T DO THIS IN PROD
+COPY .env .
+
 EXPOSE 8080
 
 ENTRYPOINT ["java", "-jar", "app.jar"]

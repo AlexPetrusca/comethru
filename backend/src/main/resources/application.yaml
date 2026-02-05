@@ -24,7 +24,7 @@ integration:
 security:
   auth:
     session:
-      duration: 1h
+      duration: 24h
     cookie:
       name: AUTH_TOKEN
       secure: false
