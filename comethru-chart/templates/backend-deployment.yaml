@@ -2,20 +2,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "comethru-chart.fullname" . }}-backend
+  name: {{ include "comethru.name" . }}-backend
   labels:
-    {{- include "comethru-chart.labels" . | nindent 4 }}
-    app.kubernetes.io/component: backend
+    {{- include "comethru.selectorLabels" . | nindent 4 }}
+    component: backend
 spec:
   selector:
     matchLabels:
-      {{- include "comethru-chart.selectorLabels" . | nindent 6 }}
-      app.kubernetes.io/component: backend
+      {{- include "comethru.selectorLabels" . | nindent 6 }}
+      component: backend
   template:
     metadata:
       labels:
-        {{- include "comethru-chart.selectorLabels" . | nindent 8 }}
-        app.kubernetes.io/component: backend
+        {{- include "comethru.selectorLabels" . | nindent 8 }}
+        component: backend
     spec:
       containers:
         - name: {{ .Chart.Name }}-backend
@@ -29,7 +29,7 @@ spec:
             - name: SPRING_PROFILES_ACTIVE
               value: "prod"
             - name: DB_HOST
-              value: "{{ include "comethru-chart.fullname" . }}-postgresql"
+              value: "{{ include "comethru.name" . }}-postgresql"
             - name: DB_PORT
               value: "5432"
             - name: DB_USER

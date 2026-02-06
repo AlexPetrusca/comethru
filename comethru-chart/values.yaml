@@ -1,7 +1,6 @@
 # Default values for comethru-chart.
 
-nameOverride: ""
-fullnameOverride: "comethru"
+appName: "comethru"
 
 nginx:
   enabled: true

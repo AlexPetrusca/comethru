@@ -2,20 +2,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "comethru-chart.fullname" . }}-nginx
+  name: {{ include "comethru.name" . }}-nginx
   labels:
-    {{- include "comethru-chart.labels" . | nindent 4 }}
+    {{- include "comethru.selectorLabels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.nginx.replicaCount }}
   selector:
     matchLabels:
-      {{- include "comethru-chart.selectorLabels" . | nindent 6 }}
-      app.kubernetes.io/component: nginx
+      {{- include "comethru.selectorLabels" . | nindent 6 }}
+      component: nginx
   template:
     metadata:
       labels:
-        {{- include "comethru-chart.selectorLabels" . | nindent 8 }}
-        app.kubernetes.io/component: nginx
+        {{- include "comethru.selectorLabels" . | nindent 8 }}
+        component: nginx
     spec:
       containers:
         - name: nginx
@@ -32,7 +32,7 @@ spec:
       volumes:
         - name: nginx-config
           configMap:
-            name: {{ include "comethru-chart.fullname" . }}-nginx-config
+            name: {{ include "comethru.name" . }}-nginx-config
         - name: empty-dir
           emptyDir: {}
 {{- end }}

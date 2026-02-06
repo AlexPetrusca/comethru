@@ -1,19 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "comethru-chart.fullname" . }}-frontend
+  name: {{ include "comethru.name" . }}-frontend
   labels:
-    {{- include "comethru-chart.labels" . | nindent 4 }}
+    {{- include "comethru.selectorLabels" . | nindent 4 }}
 spec:
   selector:
     matchLabels:
-      {{- include "comethru-chart.selectorLabels" . | nindent 6 }}
-      app.kubernetes.io/component: frontend
+      {{- include "comethru.selectorLabels" . | nindent 6 }}
+      component: frontend
   template:
     metadata:
       labels:
-        {{- include "comethru-chart.selectorLabels" . | nindent 8 }}
-        app.kubernetes.io/component: frontend
+        {{- include "comethru.selectorLabels" . | nindent 8 }}
+        component: frontend
     spec:
       containers:
         - name: {{ .Chart.Name }}

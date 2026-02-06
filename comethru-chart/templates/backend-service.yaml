@@ -2,9 +2,9 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "comethru-chart.fullname" . }}-backend
+  name: {{ include "comethru.name" . }}-backend
   labels:
-    {{- include "comethru-chart.labels" . | nindent 4 }}
+    {{- include "comethru.selectorLabels" . | nindent 4 }}
 spec:
   type: {{ .Values.backend.service.type }}
   ports:
@@ -13,6 +13,6 @@ spec:
       protocol: TCP
       name: http
   selector:
-    {{- include "comethru-chart.selectorLabels" . | nindent 4 }}
-    app.kubernetes.io/component: backend
+    {{- include "comethru.selectorLabels" . | nindent 4 }}
+    component: backend
 {{- end }}
