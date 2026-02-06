@@ -2,14 +2,19 @@
 //  - serves ui
 //  - proxies to backend
 
+require('dotenv').config(); // Load environment variables
+
 const express = require('express');
+const morgan = require('morgan');
 const path = require('path');
 const { createProxyMiddleware } = require('http-proxy-middleware');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+const BACKEND_HOST = process.env.BACKEND_HOST || 'localhost';
+const BACKEND_PORT = process.env.BACKEND_PORT || '8080';
 
-require('dotenv').config(); // Load environment variables
+app.use(morgan('dev')); // Middleware for logging requests
 
 // Route for the home page
 app.get('/', (req, res) => {
@@ -19,17 +24,21 @@ app.get('/', (req, res) => {
 // Proxy /api
 app.use(createProxyMiddleware({
   pathFilter: '/api',
-  target: 'http://localhost:8080', // The destination server
+  target: `http://${BACKEND_HOST}:${BACKEND_PORT}`, // The destination server
   changeOrigin: true, // Needed for virtual hosted sites
-  secure: false
+  secure: false,
+  logger: console,
+  logLevel: 'error',
 }));
 
 // Proxy /auth
 app.use(createProxyMiddleware({
   pathFilter: '/auth',
-  target: 'http://localhost:8080', // The destination server
+  target: `http://${BACKEND_HOST}:${BACKEND_PORT}`, // The destination server
   changeOrigin: true, // Needed for virtual hosted sites
-  secure: false
+  secure: false,
+  logger: console,
+  logLevel: 'error',
 }));
 
 app.use(express.json()); // Middleware to parse JSON bodies
@@ -41,6 +50,7 @@ app.listen(PORT, '0.0.0.0', () => {
 });
 
 // Proxy alternative via nginx:
+// todo: use this in prod
 // server {
 //     listen 80;
 //     server_name yourdomain.com;

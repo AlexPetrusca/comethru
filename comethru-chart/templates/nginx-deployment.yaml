@@ -3,7 +3,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "comethru-chart.fullname" . }}-nginx
-  namespace: comethru
   labels:
     {{- include "comethru-chart.labels" . | nindent 4 }}
 spec:

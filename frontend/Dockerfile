@@ -2,23 +2,26 @@
 FROM node:24-alpine
 
 # Set the working directory inside the container
-WORKDIR /usr/src/app
+WORKDIR /app
 
 # Copy package.json and package-lock.json (if available) to the working directory
-COPY frontend/package*.json ./
+COPY package*.json ./
 
 # Install only production dependencies
 RUN npm ci --only=production && npm cache clean --force
 
 # Copy the rest of the application code to the working directory
-COPY frontend/ .
+COPY . .
+
+# todo: DON'T DO THIS IN PROD
+COPY .env .
 
 # Create a non-root user for security
 RUN addgroup -g 1001 -S nodejs &&\
     adduser -S nextjs -u 1001
 
 # Change ownership of the app directory to the non-root user
-RUN chown -R nextjs:nodejs /usr/src/app
+RUN chown -R nextjs:nodejs /app
 USER nextjs
 
 # Expose port 3000 to allow communication to/from the application
