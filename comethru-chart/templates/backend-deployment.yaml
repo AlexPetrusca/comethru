@@ -7,39 +7,23 @@ metadata:
     {{- include "comethru-chart.labels" . | nindent 4 }}
     app.kubernetes.io/component: backend
 spec:
-  {{- if not .Values.backend.autoscaling.enabled }}
-  replicas: {{ .Values.backend.replicaCount }}
-  {{- end }}
   selector:
     matchLabels:
       {{- include "comethru-chart.selectorLabels" . | nindent 6 }}
       app.kubernetes.io/component: backend
   template:
     metadata:
-      {{- with .Values.podAnnotations }}
-      annotations:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
       labels:
         {{- include "comethru-chart.selectorLabels" . | nindent 8 }}
         app.kubernetes.io/component: backend
     spec:
-      {{- with .Values.imagePullSecrets }}
-      imagePullSecrets:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      serviceAccountName: {{ include "comethru-chart.serviceAccountName" . }}
-      securityContext:
-        {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
         - name: {{ .Chart.Name }}-backend
-          securityContext:
-            {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.backend.image }}:{{ .Values.backend.imageTag }}"
           imagePullPolicy: {{ .Values.backend.pullPolicy }}
           ports:
             - name: http
-              containerPort: {{ .Values.backend.containerPort }}
+              containerPort: {{ .Values.backend.service.targetPort }}
               protocol: TCP
           env:
             - name: SPRING_PROFILES_ACTIVE
@@ -51,24 +35,7 @@ spec:
             - name: DB_USER
               value: "postgres"
             - name: DB_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: "{{ include "comethru-chart.fullname" . }}-postgresql"
-                  key: postgres-password
+              value: "comethru-postgres-password"
             - name: DB_NAME
               value: "comethru"
-          resources:
-            {{- toYaml .Values.resources | nindent 12 }}
-      {{- with .Values.nodeSelector }}
-      nodeSelector:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      {{- with .Values.affinity }}
-      affinity:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      {{- with .Values.tolerations }}
-      tolerations:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
 {{- end }}

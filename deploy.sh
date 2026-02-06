@@ -44,11 +44,11 @@ helm upgrade --install comethru ./comethru-chart \
 
 echo "Restarting deployments to ensure latest images are pulled..."
 kubectl rollout restart deployment/comethru-backend -n "$NAMESPACE"
-kubectl rollout restart deployment/comethru -n "$NAMESPACE" # Frontend deployment name from chart
+kubectl rollout restart deployment/comethru-frontend -n "$NAMESPACE" # Frontend deployment name from chart
 
 echo "Waiting for rollout to complete..."
 kubectl rollout status deployment/comethru-backend -n "$NAMESPACE" --timeout=300s
-kubectl rollout status deployment/comethru -n "$NAMESPACE" --timeout=300s
+kubectl rollout status deployment/comethru-frontend -n "$NAMESPACE" --timeout=300s
 
 echo "Deployment completed successfully!"
 echo "Namespace: $NAMESPACE"
