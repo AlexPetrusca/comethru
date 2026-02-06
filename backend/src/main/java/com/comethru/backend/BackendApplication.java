@@ -12,7 +12,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 public class BackendApplication {
 
 	public static void main(String[] args) {
-		Dotenv dotenv = Dotenv.load();
+		Dotenv dotenv = Dotenv.configure().ignoreIfMissing().ignoreIfMalformed().load();
 		dotenv.entries().forEach(e -> System.setProperty(e.getKey(), e.getValue()));
 
 		SpringApplication.run(BackendApplication.class, args);
