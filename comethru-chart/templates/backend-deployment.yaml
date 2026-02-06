@@ -28,14 +28,20 @@ spec:
           env:
             - name: SPRING_PROFILES_ACTIVE
               value: "prod"
+            - name: SPRING_CONFIG_IMPORT
+              value: "configtree:/etc/secrets/"
             - name: POSTGRES_HOST
               value: "{{ include "comethru.name" . }}-postgresql"
             - name: POSTGRES_PORT
               value: "{{ .Values.postgresql.primary.service.ports.postgresql }}"
-            - name: POSTGRES_USER
-              value: "postgres"
-            - name: POSTGRES_PASSWORD
-              value: "{{ .Values.postgresql.auth.postgresPassword }}"
             - name: POSTGRES_DB_NAME
               value: "{{ .Values.postgresql.auth.database }}"
+          volumeMounts:
+            - name: secrets-volume
+              mountPath: "/etc/secrets"
+              readOnly: true
+      volumes:
+        - name: secrets-volume
+          secret:
+            secretName: {{ include "comethru.name" . }}-backend-secret
 {{- end }}
