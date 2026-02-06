@@ -21,9 +21,9 @@ spec:
           imagePullPolicy: {{ .Values.frontend.pullPolicy }}
           env:
             - name: BACKEND_HOST
-              value: "comethru-backend"
+              value: "{{ include "comethru.name" . }}-backend"
             - name: BACKEND_PORT
-              value: "80"
+              value: "{{ .Values.backend.service.port }}"
           ports:
             - name: http
               containerPort: {{ .Values.frontend.service.targetPort }}

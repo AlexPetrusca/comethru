@@ -39,7 +39,6 @@ helm upgrade --install comethru ./comethru-chart \
   --set frontend.image=alexpetrusca/comethru-frontend \
   --set frontend.imageTag="$IMAGE_TAG" \
   --set frontend.pullPolicy=Always \
-  --set postgresql.enabled=true \
   --wait
 
 echo "Restarting deployments to ensure latest images are pulled..."

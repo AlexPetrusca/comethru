@@ -36,8 +36,10 @@ backend:
 postgresql:
   enabled: true
   auth:
-    postgresPassword: "comethru-postgres-password" # todo: remove later - no password in code
     database: "comethru"
+    username: "comethru"
+    password: "comethru-postgres-password" # todo: remove later - no password in code
+    postgresPassword: "comethru-postgres-admin-password" # todo: remove later - no password in code
   architecture: standalone
   primary:
     persistence:

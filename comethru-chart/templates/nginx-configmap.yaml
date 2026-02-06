@@ -18,7 +18,7 @@ data:
             listen 80;
 
             location / {
-                proxy_pass http://comethru-frontend:{{ .Values.frontend.service.port }};
+                proxy_pass http://{{ include "comethru.name" . }}-frontend:{{ .Values.frontend.service.port }};
 
                 proxy_set_header Host $host;
                 proxy_set_header X-Real-IP $remote_addr;

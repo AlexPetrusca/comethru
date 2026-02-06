@@ -28,14 +28,14 @@ spec:
           env:
             - name: SPRING_PROFILES_ACTIVE
               value: "prod"
-            - name: DB_HOST
+            - name: POSTGRES_HOST
               value: "{{ include "comethru.name" . }}-postgresql"
-            - name: DB_PORT
-              value: "5432"
-            - name: DB_USER
+            - name: POSTGRES_PORT
+              value: "{{ .Values.postgresql.primary.service.ports.postgresql }}"
+            - name: POSTGRES_USER
               value: "postgres"
-            - name: DB_PASSWORD
-              value: "comethru-postgres-password"
-            - name: DB_NAME
-              value: "comethru"
+            - name: POSTGRES_PASSWORD
+              value: "{{ .Values.postgresql.auth.postgresPassword }}"
+            - name: POSTGRES_DB_NAME
+              value: "{{ .Values.postgresql.auth.database }}"
 {{- end }}
