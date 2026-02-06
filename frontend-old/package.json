@@ -1,0 +1,29 @@
+{
+  "name": "hello-world-express",
+  "version": "1.0.0",
+  "description": "A simple Express app serving a Hello World page",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "dependencies": {
+    "dotenv": "^17.2.3",
+    "express": "^4.22.1",
+    "http-proxy-middleware": "^3.0.5",
+    "morgan": "^1.10.1",
+    "node-fetch": "^2.7.0",
+    "react-router-dom": "^7.13.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  },
+  "keywords": [
+    "express",
+    "hello-world",
+    "javascript",
+    "web"
+  ],
+  "author": "",
+  "license": "ISC"
+}
