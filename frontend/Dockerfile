@@ -14,4 +14,4 @@ COPY . .
 EXPOSE 3000
 
 # Start Vite server
-CMD ["npm", "run", "dev"]
+CMD ["npm", "run", "preview"]
