@@ -24,3 +24,12 @@ node_modules/
 
 # Legacy
 frontend-old/
+
+# Helm & Kubernetes
+*.tgz
+*.lock
+!Chart.lock
+*.kubeconfig
+# ignore downloaded charts in chart directory if using helm dependency update
+**/charts/*.tgz
+secrets.yaml
