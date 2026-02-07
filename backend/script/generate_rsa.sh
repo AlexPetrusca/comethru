@@ -1,3 +1,8 @@
+# generate_rsa.sh
+#
+# Generate a RSA public/private key pair in src/main/resources/certs.
+# Base64-encoded keys are written to .env file.
+
 mkdir -p ../src/main/resources/certs
 cd ../src/main/resources/certs || exit
 
