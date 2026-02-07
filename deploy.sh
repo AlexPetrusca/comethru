@@ -45,7 +45,6 @@ helm template "$RELEASE_NAME" ./comethru-chart \
 echo "Deploying to Kubernetes namespace: $NAMESPACE"
 helm upgrade --install "$RELEASE_NAME" ./comethru-chart \
   --namespace "$NAMESPACE" \
-  --set backend.enabled=true \
   --set backend.image=alexpetrusca/comethru-backend \
   --set backend.imageTag="$IMAGE_TAG" \
   --set backend.pullPolicy=Always \

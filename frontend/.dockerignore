@@ -1,0 +1,23 @@
+# Git
+.git
+.gitignore
+
+# OS
+.DS_Store
+
+# IDE
+.idea
+.vscode
+
+# Secrets
+.env
+.env.*
+
+# Dependencies and Builds
+node_modules/
+dist/
+build/
+coverage/
+
+# Scripts
+*.sh
