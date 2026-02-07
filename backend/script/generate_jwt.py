@@ -115,7 +115,7 @@ def main(argv):
     parser.add_argument(
         "--private-key",
         "-k",
-        default="./src/main/resources/certs/private_key.pem",
+        default="../src/main/resources/certs/private_key.pem",
         help="Path to RSA private key PEM file. Default ./src/main/resources/certs/private_key.pem",
     )
     parser.add_argument(

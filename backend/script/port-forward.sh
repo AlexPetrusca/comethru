@@ -1,0 +1,1 @@
+kubectl port-forward svc/comethru-postgresql 5432:5432

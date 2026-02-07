@@ -1,5 +1,5 @@
-mkdir -p ./src/main/resources/certs
-cd ./src/main/resources/certs || exit
+mkdir -p ../src/main/resources/certs
+cd ../src/main/resources/certs || exit
 
 # 1. Generate the private key
 openssl genrsa -out private_key.pem 2048
