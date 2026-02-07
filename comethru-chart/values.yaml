@@ -38,8 +38,10 @@ postgresql:
   auth:
     database: "comethru"
     username: "comethru"
-    password: "comethru-postgres-password" # todo: remove later - no password in code
-    postgresPassword: "comethru-postgres-admin-password" # todo: remove later - no password in code
+    existingSecret: "comethru-postgres-secret"
+    secretKeys:
+      adminPasswordKey: "POSTGRES_ADMIN_PASSWORD"
+      userPasswordKey: "POSTGRES_USER_PASSWORD"
   architecture: standalone
   primary:
     persistence:

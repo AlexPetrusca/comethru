@@ -34,6 +34,10 @@ spec:
               value: "{{ include "comethru.name" . }}-postgresql"
             - name: POSTGRES_PORT
               value: "{{ .Values.postgresql.primary.service.ports.postgresql }}"
+            - name: POSTGRES_ADMIN_USERNAME
+              value: "postgres"
+            - name: POSTGRES_USER_USERNAME
+              value: "{{ .Values.postgresql.auth.username }}"
             - name: POSTGRES_DB_NAME
               value: "{{ .Values.postgresql.auth.database }}"
           volumeMounts:
@@ -42,6 +46,10 @@ spec:
               readOnly: true
       volumes:
         - name: secrets-volume
-          secret:
-            secretName: {{ include "comethru.name" . }}-backend-secret
+          projected:
+            sources:
+              - secret:
+                  name: {{ include "comethru.name" . }}-backend-secret
+              - secret:
+                  name: {{ include "comethru.name" . }}-postgres-secret
 {{- end }}
