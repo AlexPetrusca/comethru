@@ -52,4 +52,11 @@ spec:
                   name: {{ include "comethru.name" . }}-backend-secret
               - secret:
                   name: {{ include "comethru.name" . }}-postgres-secret
+              - secret:
+                  name: {{ include "comethru.name" . }}-minio-secret
+                  items:
+                    - key: rootUser
+                      path: MINIO_ROOT_USERNAME
+                    - key: rootPassword
+                      path: MINIO_ROOT_PASSWORD
 {{- end }}

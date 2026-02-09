@@ -83,3 +83,37 @@ ingress-nginx:
       use-proxy-protocol: "false"
       use-forwarded-headers: "true"
       compute-full-forwarded-for: "true"
+
+minio:
+  enabled: true
+  mode: standalone
+  existingSecret: "comethru-minio-secret"
+  persistence:
+    enabled: true
+    size: 20Gi
+    storageClass: ""  # Use default storage class
+  resources:
+    requests:
+      memory: 512Mi
+      cpu: 250m
+    limits:
+      memory: 1Gi
+      cpu: 500m
+  service:
+    type: ClusterIP
+    port: 9000
+  consoleService:
+    type: ClusterIP
+    port: 9001
+  buckets:
+    - name: images
+      policy: none
+      purge: false
+  policies:
+    - name: user-policy
+      statements:
+        - resources:
+            - 'arn:aws:s3:::images/*'
+          actions:
+            - "s3:GetObject"
+            - "s3:PutObject"
