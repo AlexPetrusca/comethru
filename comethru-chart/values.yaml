@@ -12,16 +12,6 @@ nginx:
   upstreamService: "comethru"  # The service name of your frontend app
   upstreamPort: 80  # The port on which your frontend service is exposed
 
-frontend:
-  image: "alexpetrusca/comethru-frontend"
-  imageTag: "latest"
-  pullPolicy: Always
-  replicaCount: 1
-  service:
-    type: ClusterIP  # Using ClusterIP since we'll access via ingress
-    port: 80
-    targetPort: 3000
-
 backend:
   enabled: true
   image: "alexpetrusca/comethru-backend"
