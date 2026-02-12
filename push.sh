@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Top-level script to push all application components to Docker Hub
 # Usage: ./push.sh [--dev|--prod]

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Top-level script to deploy all application components to Kubernetes
 # Usage: IMAGE_TAG=<tag> ./deploy.sh
@@ -48,18 +48,17 @@ helm upgrade --install "$RELEASE_NAME" ./comethru-chart \
   --set backend.image=alexpetrusca/comethru-backend \
   --set backend.imageTag="$IMAGE_TAG" \
   --set backend.pullPolicy=Always \
-  --set frontend.image=alexpetrusca/comethru-frontend \
-  --set frontend.imageTag="$IMAGE_TAG" \
-  --set frontend.pullPolicy=Always \
   --wait
 
 echo "Restarting deployments to ensure latest images are pulled..."
 kubectl rollout restart deployment/comethru-backend -n "$NAMESPACE" 2>/dev/null || true
-kubectl rollout restart deployment/comethru-frontend -n "$NAMESPACE" 2>/dev/null || true
 
 echo "Waiting for rollout to complete..."
 kubectl rollout status deployment/comethru-backend -n "$NAMESPACE" --timeout=300s
-kubectl rollout status deployment/comethru-frontend -n "$NAMESPACE" --timeout=300s
+
+# Build and upload frontend to s3/minio
+echo "Building and deploying frontend..."
+(cd ./frontend/scripts && ./deploy.sh)
 
 echo "Deployment completed successfully!"
 echo "Namespace: $NAMESPACE"

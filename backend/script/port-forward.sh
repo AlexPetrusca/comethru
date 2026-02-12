@@ -1,5 +1,5 @@
-# port-forward.sh
-#
+#!/usr/bin/env bash
+
 # Port-forward to access postgres and minio running in kubernetes.
 
 pkill -f "kubectl port-forward svc/comethru-postgresql"
