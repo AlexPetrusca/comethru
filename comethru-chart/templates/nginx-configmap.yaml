@@ -14,24 +14,38 @@ data:
         include       /etc/nginx/mime.types;
         default_type  application/octet-stream;
 
+        upstream minio {
+            server {{ include "comethru.name" . }}-minio:{{ .Values.minio.service.port }};
+            keepalive 32;
+        }
+
+        upstream backend {
+            server {{ include "comethru.name" . }}-backend:{{ .Values.backend.service.port }};
+            keepalive 32;
+        }
+
         server {
             listen 80;
 
             location / {
-                proxy_pass http://{{ include "comethru.name" . }}-frontend:{{ .Values.frontend.service.port }};
+                # If the request is for the root "/", rewrite it to "/index.html"
+                rewrite ^/$ /index.html break;
+
+                # Proxy to MinIO, appending the (potentially rewritten) $uri
+                proxy_pass http://minio/frontend$uri;
 
                 proxy_set_header Host $host;
                 proxy_set_header X-Real-IP $remote_addr;
-                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-                proxy_set_header X-Forwarded-Proto $scheme;
-                 # WebSocket support
-                proxy_http_version 1.1;
-                proxy_set_header Upgrade $http_upgrade;
-                proxy_set_header Connection "upgrade";
+
+                # Handle SPA routing
+                #  - If MinIO returns 404 (file not found), serve index.html instead
+                #  - This allows the frontend router to handle the path.
+                proxy_intercept_errors on;
+                error_page 404 = /index.html;
             }
 
             location /api/ {
-                proxy_pass http://{{ include "comethru.name" . }}-backend:{{ .Values.backend.service.port }}/;
+                proxy_pass http://backend;
                 proxy_set_header Host $host;
                 proxy_set_header X-Real-IP $remote_addr;
                 proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
@@ -39,7 +53,7 @@ data:
             }
 
             location /auth/ {
-                proxy_pass http://{{ include "comethru.name" . }}-backend:{{ .Values.backend.service.port }}/auth/;
+                proxy_pass http://backend;
                 proxy_set_header Host $host;
                 proxy_set_header X-Real-IP $remote_addr;
                 proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
