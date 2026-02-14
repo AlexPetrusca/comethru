@@ -32,4 +32,4 @@ frontend-old/
 *.kubeconfig
 # ignore downloaded charts in chart directory if using helm dependency update
 **/charts/*.tgz
-secrets.yaml
+values.secret.yaml
