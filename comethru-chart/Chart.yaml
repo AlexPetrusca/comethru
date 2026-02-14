@@ -23,3 +23,7 @@ dependencies:
     version: "32.x.x"
     repository: "https://charts.bitnami.com/bitnami"
     condition: kafka.enabled
+  - name: redis
+    version: "25.x.x"
+    repository: "https://charts.bitnami.com/bitnami"
+    condition: redis.enabled

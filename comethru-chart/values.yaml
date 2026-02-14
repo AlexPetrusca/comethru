@@ -116,3 +116,13 @@ kafka:
     enabled: false
   kraft:
     enabled: true
+
+redis:
+  enabled: true
+  architecture: standalone
+  auth:
+    enabled: false
+  master:
+    persistence:
+      enabled: true
+      size: 1Gi
