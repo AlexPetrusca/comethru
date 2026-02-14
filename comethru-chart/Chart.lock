@@ -1,0 +1,18 @@
+dependencies:
+- name: ingress-nginx
+  repository: https://kubernetes.github.io/ingress-nginx
+  version: 4.14.3
+- name: minio
+  repository: https://charts.min.io/
+  version: 5.4.0
+- name: postgresql
+  repository: https://charts.bitnami.com/bitnami
+  version: 18.3.0
+- name: kafka
+  repository: https://charts.bitnami.com/bitnami
+  version: 32.4.3
+- name: redis
+  repository: https://charts.bitnami.com/bitnami
+  version: 25.2.0
+digest: sha256:95e807c9a140df93233dc0e4708ac4a0bad870ebe88f601c463051eba9709836
+generated: "2026-02-14T12:04:12.577983-08:00"

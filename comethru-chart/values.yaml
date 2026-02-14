@@ -2,6 +2,10 @@
 
 appName: "comethru"
 
+global:
+  security:
+    allowInsecureImages: true
+
 nginx:
   enabled: true
   image: nginx:alpine
@@ -110,6 +114,10 @@ postgresql:
 
 kafka:
   enabled: true
+  image:
+    registry: docker.io
+    repository: soldevelo/kafka
+    tag: 4.1.1
   persistence:
     enabled: true
     size: 5Gi
