@@ -23,25 +23,6 @@ backend:
     port: 80
     targetPort: 8080
 
-postgresql:
-  enabled: true
-  auth:
-    database: "comethru"
-    username: "comethru"
-    existingSecret: "comethru-postgres-secret"
-    secretKeys:
-      adminPasswordKey: "POSTGRES_ADMIN_PASSWORD"
-      userPasswordKey: "POSTGRES_USER_PASSWORD"
-  architecture: standalone
-  primary:
-    persistence:
-      enabled: true
-      size: 8Gi
-      storageClass: ""
-    service:
-      ports:
-        postgresql: 5432
-
 ingress:
   enabled: true
   className: "nginx"
@@ -107,6 +88,26 @@ minio:
           actions:
             - "s3:GetObject"
             - "s3:PutObject"
+
+postgresql:
+  enabled: true
+  auth:
+    database: "comethru"
+    username: "comethru"
+    existingSecret: "comethru-postgres-secret"
+    secretKeys:
+      adminPasswordKey: "POSTGRES_ADMIN_PASSWORD"
+      userPasswordKey: "POSTGRES_USER_PASSWORD"
+  architecture: standalone
+  primary:
+    persistence:
+      enabled: true
+      size: 8Gi
+      storageClass: ""
+    service:
+      ports:
+        postgresql: 5432
+
 kafka:
   enabled: true
   persistence:
