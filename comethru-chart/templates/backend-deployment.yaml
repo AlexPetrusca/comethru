@@ -2,7 +2,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "comethru.name" . }}-backend
+  name: comethru-backend
   labels:
     {{- include "comethru.selectorLabels" . | nindent 4 }}
     component: backend
@@ -31,7 +31,7 @@ spec:
             - name: SPRING_CONFIG_IMPORT
               value: "configtree:/etc/secrets/"
             - name: POSTGRES_HOST
-              value: "{{ include "comethru.name" . }}-postgresql"
+              value: "comethru-postgresql"
             - name: POSTGRES_PORT
               value: "{{ .Values.postgresql.primary.service.ports.postgresql }}"
             - name: POSTGRES_ADMIN_USERNAME
@@ -49,11 +49,11 @@ spec:
           projected:
             sources:
               - secret:
-                  name: {{ include "comethru.name" . }}-backend-secret
+                  name: comethru-backend-secret
               - secret:
-                  name: {{ include "comethru.name" . }}-postgres-secret
+                  name: comethru-postgres-secret
               - secret:
-                  name: {{ include "comethru.name" . }}-minio-secret
+                  name: comethru-minio-secret
                   items:
                     - key: rootUser
                       path: MINIO_ROOT_USERNAME

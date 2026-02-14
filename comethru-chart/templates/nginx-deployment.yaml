@@ -2,7 +2,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "comethru.name" . }}-nginx
+  name: comethru-nginx
   labels:
     {{- include "comethru.selectorLabels" . | nindent 4 }}
 spec:
@@ -32,7 +32,7 @@ spec:
       volumes:
         - name: nginx-config
           configMap:
-            name: {{ include "comethru.name" . }}-nginx-config
+            name: comethru-nginx-config
         - name: empty-dir
           emptyDir: {}
 {{- end }}

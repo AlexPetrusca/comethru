@@ -116,8 +116,8 @@ kafka:
   enabled: true
   image:
     registry: docker.io
-    repository: soldevelo/kafka
-    tag: 4.1.1
+    repository: bitnamilegacy/kafka
+    tag: 4.0.0-debian-12-r10
   persistence:
     enabled: true
     size: 5Gi

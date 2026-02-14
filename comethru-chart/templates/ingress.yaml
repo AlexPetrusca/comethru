@@ -1,9 +1,9 @@
 {{- if .Values.ingress.enabled -}}
-{{- $fullName := include "comethru.name" . -}}
+
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: {{ $fullName }}
+  name: "comethru"
   labels:
     {{- include "comethru.selectorLabels" . | nindent 4 }}
   {{- with .Values.ingress.annotations }}
@@ -24,7 +24,7 @@ spec:
             pathType: {{ .pathType }}
             backend:
               service:
-                name: {{ $fullName }}-nginx
+                name: comethru-nginx
                 port:
                   number: 80
           {{- end }}

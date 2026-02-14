@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ include "comethru.name" . }}-nginx-config
+  name: comethru-nginx-config
   labels:
     {{- include "comethru.selectorLabels" . | nindent 4 }}
 data:
@@ -15,12 +15,12 @@ data:
         default_type  application/octet-stream;
 
         upstream minio {
-            server {{ include "comethru.name" . }}-minio:{{ .Values.minio.service.port }};
+            server comethru-minio:{{ .Values.minio.service.port }};
             keepalive 32;
         }
 
         upstream backend {
-            server {{ include "comethru.name" . }}-backend:{{ .Values.backend.service.port }};
+            server comethru-backend:{{ .Values.backend.service.port }};
             keepalive 32;
         }
 
