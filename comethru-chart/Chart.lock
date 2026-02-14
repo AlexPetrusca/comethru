@@ -4,9 +4,12 @@ dependencies:
   version: 4.14.3
 - name: postgresql
   repository: https://charts.bitnami.com/bitnami
-  version: 18.2.4
+  version: 18.3.0
 - name: minio
   repository: https://charts.min.io/
   version: 5.4.0
-digest: sha256:23a2d48ba159aa2ead2aaac465f66eb367b4298eab772ca9f45e5402cc5b8edb
-generated: "2026-02-08T13:17:48.209284-08:00"
+- name: kafka
+  repository: https://charts.bitnami.com/bitnami
+  version: 26.11.4
+digest: sha256:c0fb856f8713f108a6d8d70278301937b5c8856bc78b9b7affe891e4f443af09
+generated: "2026-02-14T10:27:33.15034-08:00"

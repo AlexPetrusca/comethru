@@ -107,3 +107,12 @@ minio:
           actions:
             - "s3:GetObject"
             - "s3:PutObject"
+kafka:
+  enabled: true
+  persistence:
+    enabled: true
+    size: 5Gi
+  zookeeper:
+    enabled: false
+  kraft:
+    enabled: true

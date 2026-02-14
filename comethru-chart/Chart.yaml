@@ -19,3 +19,7 @@ dependencies:
     version: "5.x.x"
     repository: "https://charts.min.io/"
     condition: minio.enabled
+  - name: kafka
+    version: "32.x.x"
+    repository: "https://charts.bitnami.com/bitnami"
+    condition: kafka.enabled
