@@ -15,12 +15,13 @@ export AWS_SECRET_ACCESS_KEY="comethru-minio-password"
 npm install >/dev/null
 npm run build
 
-if pgrep -f "kubectl port-forward svc/comethru-minio" > /dev/null; then
+if pgrep -f "kubectl port-forward svc/comethru-minio" >/dev/null; then
     TEMP_TUNNEL=false
 else
     TEMP_TUNNEL=true
     echo "Starting port-forward..."
     kubectl port-forward svc/comethru-minio 9000:9000 >/dev/null &
+    sleep 1 # Wait for port-forward to be ready
 fi
 
 if ! aws --endpoint-url "$ENDPOINT" s3api head-bucket --bucket "$BUCKET_NAME" 2>/dev/null; then

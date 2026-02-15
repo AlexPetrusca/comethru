@@ -19,11 +19,11 @@ dependencies:
     version: "18.x.x"
     repository: "https://charts.bitnami.com/bitnami"
     condition: postgresql.enabled
-  - name: kafka
-    version: "32.x.x"
-    repository: "https://charts.bitnami.com/bitnami"
-    condition: kafka.enabled
   - name: redis
     version: "25.x.x"
     repository: "https://charts.bitnami.com/bitnami"
     condition: redis.enabled
+  - name: kafka
+    version: "32.x.x"
+    repository: "https://charts.bitnami.com/bitnami"
+    condition: kafka.enabled

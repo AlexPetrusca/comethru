@@ -8,11 +8,11 @@ dependencies:
 - name: postgresql
   repository: https://charts.bitnami.com/bitnami
   version: 18.3.0
-- name: kafka
-  repository: https://charts.bitnami.com/bitnami
-  version: 32.4.3
 - name: redis
   repository: https://charts.bitnami.com/bitnami
   version: 25.2.0
-digest: sha256:95e807c9a140df93233dc0e4708ac4a0bad870ebe88f601c463051eba9709836
-generated: "2026-02-14T12:04:12.577983-08:00"
+- name: kafka
+  repository: https://charts.bitnami.com/bitnami
+  version: 32.4.3
+digest: sha256:25b3d993f4791671f1670bdd70ae23920bd81c0b7da5a15b9419b22069a0b95e
+generated: "2026-02-14T16:05:05.385843-08:00"

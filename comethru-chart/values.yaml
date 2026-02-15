@@ -112,12 +112,29 @@ postgresql:
       ports:
         postgresql: 5432
 
+redis:
+  enabled: true
+  architecture: standalone
+  auth:
+    enabled: true
+    existingSecret: "comethru-redis-secret"
+    existingSecretPasswordKey: "REDIS_ADMIN_PASSWORD"
+  master:
+    persistence:
+      enabled: true
+      size: 1Gi
+
 kafka:
   enabled: true
   image:
     registry: docker.io
     repository: bitnamilegacy/kafka
     tag: 4.0.0-debian-12-r10
+  auth:
+    enabled: false
+    clientProtocol: plaintext
+    interBrokerProtocol: plaintext
+    controllerProtocol: plaintext
   persistence:
     enabled: true
     size: 5Gi
@@ -125,13 +142,3 @@ kafka:
     enabled: false
   kraft:
     enabled: true
-
-redis:
-  enabled: true
-  architecture: standalone
-  auth:
-    enabled: false
-  master:
-    persistence:
-      enabled: true
-      size: 1Gi
