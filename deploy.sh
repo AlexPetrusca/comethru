@@ -34,25 +34,34 @@ if ! command -v helm &> /dev/null; then
   exit 1
 fi
 
-# Wipe the namespace (if requested)
-if [ "$FORCE_RECREATE" = true ]; then
-    echo "Uninstalling previous release..."
-    helm uninstall $RELEASE_NAME --namespace comethru --ignore-not-found --wait
-fi
-
 # Build Helm dependencies
 echo "Updating Helm dependencies..."
 helm dependency build comethru-chart
+
+# Wipe the namespace (if requested)
+if [ "$FORCE_RECREATE" = true ]; then
+    echo "Uninstalling previous release..."
+    helm uninstall $RELEASE_NAME --namespace comethru --ignore-not-found
+    kubectl delete namespace comethru --wait
+fi
+
+## Create namespace first if it doesn't exist
+#echo "Ensuring namespace exists..."
+#kubectl create namespace "$NAMESPACE" 2>/dev/null || echo "Namespace $NAMESPACE already exists"
+#kubectl label namespace "$NAMESPACE"  app.kubernetes.io/managed-by=Helm --overwrite
+#kubectl annotate namespace "$NAMESPACE" meta.helm.sh/release-name="$RELEASE_NAME" meta.helm.sh/release-namespace="$NAMESPACE" --overwrite
 
 # Deploy using Helm
 echo "Deploying to Kubernetes namespace: $NAMESPACE"
 helm upgrade --install "$RELEASE_NAME" ./comethru-chart \
   --namespace "$NAMESPACE" --create-namespace \
-  -f ./comethru-chart/values.yaml -f ./comethru-chart/values.secret.yaml \
+  --values ./comethru-chart/values.yaml \
+  --values ./comethru-chart/values.secret.yaml \
   --set backend.image=alexpetrusca/comethru-backend \
   --set backend.imageTag="$IMAGE_TAG" \
-  --set backend.pullPolicy=Always \
-  --wait
+  --set backend.pullPolicy=Always
+
+kubectl rollout status statefulset -l app.kubernetes.io/instance=comethru -n comethru
 
 #echo "Restarting deployments to ensure latest images are pulled..."
 #kubectl rollout restart deployment/comethru-backend -n "$NAMESPACE" 2>/dev/null || true
