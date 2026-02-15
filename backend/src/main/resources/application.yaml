@@ -14,6 +14,21 @@ spring:
       hibernate:
         format_sql: true
         dialect: org.hibernate.dialect.PostgreSQLDialect
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD}
+  cloud:
+    aws:
+      credentials:
+        access-key: ${MINIO_ADMIN_USERNAME}
+        secret-key: ${MINIO_ADMIN_PASSWORD}
+      s3:
+        endpoint: http://${MINIO_HOST:localhost}:${MINIO_PORT:9000}
+        path-style-access-enabled: true
+      region:
+        static: us-east-1
 
 integration:
   twilio:

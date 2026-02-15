@@ -13,8 +13,8 @@ nginx:
   service:
     type: ClusterIP
     port: 80
-  upstreamService: "comethru"  # The service name of your frontend app
-  upstreamPort: 80  # The port on which your frontend service is exposed
+  upstreamService: "comethru"
+  upstreamPort: 80
 
 backend:
   enabled: true
@@ -32,7 +32,6 @@ ingress:
   className: "nginx"
   annotations:
     kubernetes.io/ingress.class: nginx
-    # Allow local connections
     nginx.ingress.kubernetes.io/ssl-redirect: "false"
     nginx.ingress.kubernetes.io/use-regex: "true"
   hosts:
@@ -45,13 +44,11 @@ ingress:
 ingress-nginx:
   enabled: true
   controller:
-    namespaceOverride: "comethru"  # Deploy ingress controller to comethru namespace
     service:
       type: LoadBalancer
       ports:
-        http: 80  # Change to whatever port you want
-        https: 443  # Also change HTTPS if needed
-    hostNetwork: false # Enable hostNetwork to bind directly to the host's network # todo check this out
+        http: 80
+        https: 443
     admissionWebhooks:
       enabled: false
     config:
@@ -66,7 +63,6 @@ minio:
   persistence:
     enabled: true
     size: 20Gi
-    storageClass: ""  # Use default storage class
   resources:
     requests:
       memory: 512Mi
@@ -107,7 +103,6 @@ postgresql:
     persistence:
       enabled: true
       size: 8Gi
-      storageClass: ""
     service:
       ports:
         postgresql: 5432

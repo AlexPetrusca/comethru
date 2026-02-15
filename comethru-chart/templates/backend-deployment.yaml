@@ -53,10 +53,12 @@ spec:
               - secret:
                   name: comethru-postgres-secret
               - secret:
+                  name: comethru-redis-secret
+              - secret:
                   name: comethru-minio-secret
                   items:
-                    - key: rootUser
-                      path: MINIO_ROOT_USERNAME
-                    - key: rootPassword
-                      path: MINIO_ROOT_PASSWORD
+                    - key: adminUser
+                      path: MINIO_ADMIN_USERNAME
+                    - key: adminPassword
+                      path: MINIO_ADMIN_PASSWORD
 {{- end }}
