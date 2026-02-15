@@ -130,15 +130,20 @@ kafka:
     registry: docker.io
     repository: bitnamilegacy/kafka
     tag: 4.0.0-debian-12-r10
-  auth:
-    enabled: false
-    clientProtocol: plaintext
-    interBrokerProtocol: plaintext
-    controllerProtocol: plaintext
-  persistence:
-    enabled: true
-    size: 5Gi
-  zookeeper:
-    enabled: false
-  kraft:
-    enabled: true
+  controller:
+    replicaCount: 1
+  broker:
+    replicaCount: 0
+  overrideConfiguration:
+    advertised.listeners: "CLIENT://localhost:9092,INTERNAL://comethru-kafka-controller-0.comethru-kafka-controller-headless.comethru.svc.cluster.local:9094"
+  listeners:
+    client:
+      protocol: PLAINTEXT
+    controller:
+      protocol: PLAINTEXT
+    interbroker:
+      protocol: PLAINTEXT
+  service:
+    type: ClusterIP
+    ports:
+      client: 9092
