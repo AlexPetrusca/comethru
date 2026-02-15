@@ -40,6 +40,10 @@ spec:
               value: "{{ .Values.postgresql.auth.username }}"
             - name: POSTGRES_DB_NAME
               value: "{{ .Values.postgresql.auth.database }}"
+            - name: MINIO_HOST
+              value: "comethru-minio"
+            - name: MINIO_PORT
+              value: "{{ .Values.minio.service.port }}"
           volumeMounts:
             - name: secrets-volume
               mountPath: "/etc/secrets"
@@ -57,8 +61,8 @@ spec:
               - secret:
                   name: comethru-minio-secret
                   items:
-                    - key: adminUser
+                    - key: rootUser
                       path: MINIO_ADMIN_USERNAME
-                    - key: adminPassword
+                    - key: rootPassword
                       path: MINIO_ADMIN_PASSWORD
 {{- end }}
