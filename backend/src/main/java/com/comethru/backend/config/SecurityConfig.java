@@ -16,7 +16,7 @@ import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
-import org.springframework.security.oauth2.server.resource.web.authentication.BearerTokenAuthenticationFilter;
+import org.springframework.security.oauth2.server.resource.web.BearerTokenResolver;
 import org.springframework.security.web.SecurityFilterChain;
 
 import java.security.interfaces.RSAPrivateKey;
@@ -27,12 +27,12 @@ public class SecurityConfig {
 
     private final RSAPublicKey publicKey;
     private final RSAPrivateKey privateKey;
-    private final JwtCookieFilter jwtCookieFilter;
+    private final BearerTokenResolver bearerTokenResolver;
 
-    public SecurityConfig(RSAPublicKey publicKey, RSAPrivateKey privateKey, JwtCookieFilter jwtCookieFilter) {
+    public SecurityConfig(RSAPublicKey publicKey, RSAPrivateKey privateKey, BearerTokenResolver bearerTokenResolver) {
         this.publicKey = publicKey;
         this.privateKey = privateKey;
-        this.jwtCookieFilter = jwtCookieFilter;
+        this.bearerTokenResolver = bearerTokenResolver;
     }
 
     @Bean
@@ -50,8 +50,10 @@ public class SecurityConfig {
         http.csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth.anyRequest().authenticated()) // require auth
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // no sessions
-                .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults())) // verify jwt token
-                .addFilterBefore(jwtCookieFilter, BearerTokenAuthenticationFilter.class); // get jwt from cookie if present
+                .oauth2ResourceServer(oauth2 -> oauth2
+                        .bearerTokenResolver(bearerTokenResolver) // get jwt from cookie if present
+                        .jwt(Customizer.withDefaults()) // verify jwt token
+                );
         return http.build();
     }
 
