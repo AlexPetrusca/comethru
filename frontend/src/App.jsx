@@ -155,6 +155,58 @@ function App() {
         }
     };
 
+    const [selectedFile, setSelectedFile] = useState(null);
+    const [isUploading, setIsUploading] = useState(false);
+    const [uploadStatus, setUploadStatus] = useState('');
+
+    const handleFileSelect = (event) => {
+        setSelectedFile(event.target.files[0]);
+        setUploadStatus('');
+    };
+
+    const handleUpload = async () => {
+        if (!selectedFile) {
+            setUploadStatus('Please select a file first.');
+            return;
+        }
+
+        setIsUploading(true);
+        setUploadStatus('');
+
+        try {
+            // 1. Get Presigned URL
+            const urlResponse = await fetch(`/api/s3/upload-url?filename=${encodeURIComponent(selectedFile.name)}&contentType=${encodeURIComponent(selectedFile.type)}`);
+
+            if (!urlResponse.ok) {
+                throw new Error('Failed to get upload URL');
+            }
+
+            const { uploadUrl } = await urlResponse.json();
+
+            // 2. Upload to S3
+            const uploadResponse = await fetch(uploadUrl, {
+                method: 'PUT',
+                body: selectedFile,
+                headers: {
+                    'Content-Type': selectedFile.type
+                }
+            });
+
+            if (uploadResponse.ok) {
+                setUploadStatus('Success! Image uploaded.');
+                setSelectedFile(null);
+                // Reset file input if possible, or just clear state
+            } else {
+                setUploadStatus('Failed to upload image to storage.');
+            }
+        } catch (error) {
+            console.error('Upload error:', error);
+            setUploadStatus(`Error: ${error.message}`);
+        } finally {
+            setIsUploading(false);
+        }
+    };
+
     return (
         <div className="container">
             <h1>ComeThru</h1>
@@ -205,6 +257,24 @@ function App() {
                 <div id="home-screen">
                     <h2>Welcome!</h2>
                     <p>You are successfully logged in.</p>
+
+                    <div className="upload-section">
+                        <h3>Upload Image</h3>
+                        <div className="form-group">
+                            <input
+                                type="file"
+                                accept="image/*"
+                                onChange={handleFileSelect}
+                            />
+                        </div>
+                        {selectedFile && (
+                            <button onClick={handleUpload} disabled={isUploading}>
+                                {isUploading ? 'Uploading...' : 'Upload'}
+                            </button>
+                        )}
+                        {uploadStatus && <div className={uploadStatus.includes('Success') ? 'success' : 'error'}>{uploadStatus}</div>}
+                    </div>
+
                     <div className="form-group">
                         <label>Current Time from Backend:</label>
                         <div id="current-time">{currentTime}</div>
