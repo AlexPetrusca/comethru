@@ -17,23 +17,38 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public List<User> getAllUsers() {
+    public List<User> getAll() {
         return userRepository.findAll();
     }
 
-    public User createNewUser(User user) {
+    public User createNew(User user) {
         // todo: dont throw runtime exceptions here
         //  - use your own exceptions
         //  - make it bad request
         if (userRepository.findByPhoneNumber(user.getPhoneNumber()).isPresent()) {
             throw new RuntimeException("Phone number already registered!");
         }
-        if (user.getFirstName() == null) {
-            throw new RuntimeException("First name cannot be empty!");
+        return userRepository.save(user);
+    }
+
+    public User findById(long userId) {
+        return userRepository.findById(userId).orElse(null);
+    }
+
+    public User findByPhoneNumber(String phoneNumber) {
+        return userRepository.findByPhoneNumber(phoneNumber).orElse(null);
+    }
+
+    public User updateUserProfile(String phoneNumber, String firstName, String lastName, String profilePicUrl) {
+        User user = userRepository.findByPhoneNumber(phoneNumber)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        user.setFirstName(firstName);
+        user.setLastName(lastName);
+        if (profilePicUrl != null) {
+            user.setProfilePicUrl(profilePicUrl);
         }
-        if (user.getLastName() == null) {
-            throw new RuntimeException("Last name cannot be empty!");
-        }
+
         return userRepository.save(user);
     }
 }

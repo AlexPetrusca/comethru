@@ -19,6 +19,9 @@ public class User extends BaseEntity {
     @Column(name = "last_name", nullable = false)
     private String lastName;
 
+    @Column(name = "profile_pic_url")
+    private String profilePicUrl;
+
     public Long getId() {
         return id;
     }
@@ -45,5 +48,13 @@ public class User extends BaseEntity {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public String getProfilePicUrl() {
+        return profilePicUrl;
+    }
+
+    public void setProfilePicUrl(String profilePicUrl) {
+        this.profilePicUrl = profilePicUrl;
     }
 }
