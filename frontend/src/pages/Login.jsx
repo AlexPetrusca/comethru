@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import {Navigate, useNavigate} from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import BackendApiService from '../services/BackendApiService';
 import '../App.css';
 
 const Login = () => {
@@ -20,20 +21,10 @@ const Login = () => {
         setIsLoading(true);
         setError('');
         try {
-            const response = await fetch('/auth/send_otp', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ phoneNumber })
-            });
-
-            if (response.ok) {
-                setStep('otp');
-            } else {
-                const data = await response.json();
-                setError(data.message || 'Failed to send OTP');
-            }
+            await BackendApiService.sendOtp(phoneNumber);
+            setStep('otp');
         } catch (err) {
-            setError('Network error. Please try again.');
+            setError(err.message || 'Network error. Please try again.');
         } finally {
             setIsLoading(false);
         }
@@ -47,28 +38,19 @@ const Login = () => {
         setIsLoading(true);
         setError('');
         try {
-            const response = await fetch('/auth/login', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ phoneNumber, code: verificationCode })
-            });
+            await BackendApiService.verifyOtp(phoneNumber, verificationCode);
 
-            if (response.ok) {
-                // Login successful (cookie set), now fetch user details
-                const user = await checkAuthStatus();
+            // Login successful (cookie set), now get user details
+            const user = await checkAuthStatus();
 
-                // If user is null but authentication succeeded (404 from /me), redirect to create account
-                if (!user) {
-                    navigate('/create-account');
-                } else {
-                    navigate('/');
-                }
+            // If user is null but authentication succeeded (404 from /me), redirect to create account
+            if (!user) {
+                navigate('/create-account');
             } else {
-                const data = await response.json().catch(() => ({}));
-                setError(data.message || 'Invalid code');
+                navigate('/');
             }
         } catch (err) {
-            setError('Network error. Please try again.');
+            setError(err.message || 'Network error. Please try again.');
         } finally {
             setIsLoading(false);
         }

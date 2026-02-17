@@ -1,4 +1,5 @@
 import { createContext, useState, useEffect, useContext } from 'react';
+import BackendApiService from '../services/BackendApiService';
 
 const AuthContext = createContext(null);
 
@@ -9,20 +10,13 @@ export const AuthProvider = ({ children }) => {
 
     const checkAuthStatus = async () => {
         try {
-            const response = await fetch('/api/users/me');
-            if (response.ok) {
-                const userData = await response.json();
+            const userData = await BackendApiService.getCurrentUser();
+            setIsAuthenticated(true);
+            if (userData) {
                 setUser(userData);
-                setIsAuthenticated(true);
                 return userData;
-            } else if (response.status === 404) {
-                // User is authenticated (valid token) but profile doesn't exist
-                setUser(null);
-                setIsAuthenticated(true);
-                return null;
             } else {
                 setUser(null);
-                setIsAuthenticated(false);
                 return null;
             }
         } catch (err) {
@@ -46,7 +40,7 @@ export const AuthProvider = ({ children }) => {
 
     const logout = async () => {
         try {
-            await fetch('/auth/logout', { method: 'POST' });
+            await BackendApiService.logout();
         } catch (err) {
             console.error('Logout failed', err);
         } finally {

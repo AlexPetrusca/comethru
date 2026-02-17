@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import BackendApiService from '../services/BackendApiService';
 import '../App.css';
 
 const CreateAccount = () => {
@@ -29,45 +30,20 @@ const CreateAccount = () => {
 
             // Upload image if selected
             if (selectedFile) {
-                const urlResponse = await fetch(`/api/s3/images`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        filename: selectedFile.name,
-                        contentType: selectedFile.type
-                    })
-                });
-                if (urlResponse.ok) {
-                    const { uploadUrl, key } = await urlResponse.json();
-                    const uploadResponse = await fetch(uploadUrl, {
-                        method: 'POST',
-                        body: selectedFile,
-                        headers: { 'Content-Type': selectedFile.type }
-                    });
-                    if (uploadResponse.ok) {
-                        profilePicUrl = key;
-                    }
-                }
+                const { uploadUrl, key } = await BackendApiService.getUploadUrl(selectedFile.name, selectedFile.type);
+                await BackendApiService.uploadFileToS3(uploadUrl, selectedFile);
+                profilePicUrl = key;
             }
 
             // Create User
-            const response = await fetch('/api/users/me', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    firstName,
-                    lastName,
-                    profilePicUrl
-                })
+            const updatedUser = await BackendApiService.createOrUpdateUser({
+                firstName,
+                lastName,
+                profilePicUrl
             });
 
-            if (response.ok) {
-                const updatedUser = await response.json();
-                updateUser(updatedUser);
-                navigate('/');
-            } else {
-                setError('Failed to create account');
-            }
+            updateUser(updatedUser);
+            navigate('/');
         } catch (err) {
             console.error(err);
             setError('Error creating account');
