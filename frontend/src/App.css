@@ -135,7 +135,14 @@ button:disabled {
 .profile-details {
     margin: 20px 0;
     text-align: left;
-    display: inline-block;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.detail-rows {
+    display: block;
 }
 
 .detail-row {

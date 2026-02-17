@@ -20,14 +20,16 @@ const Profile = () => {
                 ) : (
                     <div className="profile-pic-placeholder-large">No Image</div>
                 )}
-                <div className="detail-row">
-                    <strong>First Name:</strong> {user?.firstName}
-                </div>
-                <div className="detail-row">
-                    <strong>Last Name:</strong> {user?.lastName}
-                </div>
-                <div className="detail-row">
-                    <strong>Phone:</strong> {user?.phoneNumber}
+                <div className="detail-rows">
+                    <div className="detail-row">
+                        <strong>First Name:</strong> {user?.firstName}
+                    </div>
+                    <div className="detail-row">
+                        <strong>Last Name:</strong> {user?.lastName}
+                    </div>
+                    <div className="detail-row">
+                        <strong>Phone:</strong> {user?.phoneNumber}
+                    </div>
                 </div>
             </div>
             <button onClick={() => navigate('/')}>Back to Home</button>

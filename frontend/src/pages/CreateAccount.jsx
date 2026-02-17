@@ -29,11 +29,18 @@ const CreateAccount = () => {
 
             // Upload image if selected
             if (selectedFile) {
-                const urlResponse = await fetch(`/api/s3/upload-url?filename=${encodeURIComponent(selectedFile.name)}&contentType=${encodeURIComponent(selectedFile.type)}`);
+                const urlResponse = await fetch(`/api/s3/images`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        filename: selectedFile.name,
+                        contentType: selectedFile.type
+                    })
+                });
                 if (urlResponse.ok) {
                     const { uploadUrl, key } = await urlResponse.json();
                     const uploadResponse = await fetch(uploadUrl, {
-                        method: 'PUT',
+                        method: 'POST',
                         body: selectedFile,
                         headers: { 'Content-Type': selectedFile.type }
                     });

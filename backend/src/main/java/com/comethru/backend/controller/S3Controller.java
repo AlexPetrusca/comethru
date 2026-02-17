@@ -1,11 +1,13 @@
 package com.comethru.backend.controller;
 
+import com.comethru.backend.entity.rest.S3UploadRequest;
+import com.comethru.backend.entity.rest.S3UploadResponse;
 import com.comethru.backend.service.S3Service;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.time.Duration;
 
 @RestController
@@ -18,16 +20,31 @@ public class S3Controller {
         this.s3Service = s3Service;
     }
 
-    @GetMapping("/upload-url")
-    public S3UploadResponse getPresignedUploadUrl(@RequestParam String filename, @RequestParam String contentType) {
+    @PostMapping("/images")
+    public ResponseEntity<S3UploadResponse> getPresignedUploadUrl(@RequestBody S3UploadRequest req) {
         String bucketName = "images";
-        String key = "uploads/" + System.currentTimeMillis() + "_" + filename;
+        String key = "uploads/" + System.currentTimeMillis() + "_" + req.filename();
         
         // Generate presigned URL valid for 10 minutes
         String uploadUrl = s3Service.createPresignedUploadUrl(bucketName, key, Duration.ofMinutes(10));
         
-        return new S3UploadResponse(uploadUrl, key);
+        return ResponseEntity.ok(new S3UploadResponse(uploadUrl, key));
     }
 
-    public record S3UploadResponse(String uploadUrl, String key) {}
+    @GetMapping("/images/{*key}")
+    public ResponseEntity<Void> getPresignedDownloadUrl(@PathVariable String key) {
+        String bucketName = "images";
+
+        // Strip leading slash
+        if (key.startsWith("/")) {
+            key = key.substring(1);
+        }
+
+        // Generate presigned URL valid for 10 minutes
+        String downloadUrl = s3Service.createPresignedGetUrl(bucketName, key, Duration.ofMinutes(10));
+
+        return ResponseEntity.status(HttpStatus.TEMPORARY_REDIRECT)
+                .location(URI.create(downloadUrl))
+                .build();
+    }
 }

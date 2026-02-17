@@ -37,4 +37,17 @@ public class S3Service {
 
         return presignedRequest.url().toString();
     }
+
+    public String createPresignedGetUrl(String bucket, String key, Duration duration) {
+        software.amazon.awssdk.services.s3.model.GetObjectRequest objectRequest = software.amazon.awssdk.services.s3.model.GetObjectRequest.builder()
+                .bucket(bucket)
+                .key(key)
+                .build();
+
+        software.amazon.awssdk.services.s3.presigner.model.PresignedGetObjectRequest presignedRequest = s3Presigner.presignGetObject(presignRequest -> presignRequest
+                .signatureDuration(duration)
+                .getObjectRequest(objectRequest));
+
+        return presignedRequest.url().toString();
+    }
 }
