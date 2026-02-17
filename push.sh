@@ -74,13 +74,11 @@ build_and_push() {
 }
 
 build_and_push "Backend" "alexpetrusca/comethru-backend" "./backend" ""
-build_and_push "Frontend" "alexpetrusca/comethru-frontend" "./frontend" ""
 
 echo "----------------------------------------------------------------"
 echo "All components processed successfully!"
 echo "Environment: $ENVIRONMENT"
 echo "Backend Image: alexpetrusca/comethru-backend:$IMAGE_TAG"
-echo "Frontend Image: alexpetrusca/comethru-frontend:$IMAGE_TAG"
 if [ "$ENVIRONMENT" == "prod" ]; then
   echo "Also tagged as: latest"
 fi
