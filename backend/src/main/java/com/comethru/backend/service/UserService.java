@@ -1,10 +1,8 @@
 package com.comethru.backend.service;
 
 import com.comethru.backend.entity.User;
-import com.comethru.backend.entity.dto.UserDto;
 import com.comethru.backend.exception.ResourceNotFoundException;
 import com.comethru.backend.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,7 +12,6 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    @Autowired
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }

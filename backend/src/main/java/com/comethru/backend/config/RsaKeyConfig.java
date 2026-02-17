@@ -1,7 +1,6 @@
 package com.comethru.backend.config;
 
 import com.comethru.backend.config.properties.RsaProperties;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import java.security.KeyFactory;
@@ -16,7 +15,6 @@ public class RsaKeyConfig {
 
     RsaProperties rsaProps;
 
-    @Autowired
     public RsaKeyConfig(RsaProperties rsaProps) {
         this.rsaProps = rsaProps;
     }

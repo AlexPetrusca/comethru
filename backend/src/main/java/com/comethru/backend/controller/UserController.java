@@ -21,16 +21,16 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping
-    public ResponseEntity<List<User>> getAll() {
-        return ResponseEntity.ok(userService.getAll());
-    }
-
-    @PostMapping
-    public ResponseEntity<UserDto> createUser(@RequestBody User user) {
-        User newUser = userService.create(user);
-        return ResponseEntity.status(HttpStatus.CREATED).body(UserDto.fromUser(newUser));
-    }
+//    @GetMapping
+//    public ResponseEntity<List<User>> getAll() {
+//        return ResponseEntity.ok(userService.getAll());
+//    }
+//
+//    @PostMapping
+//    public ResponseEntity<UserDto> createUser(@RequestBody User user) {
+//        User newUser = userService.create(user);
+//        return ResponseEntity.status(HttpStatus.CREATED).body(UserDto.fromUser(newUser));
+//    }
 
     @GetMapping("/me")
     public ResponseEntity<UserDto> getMe(JwtAuthenticationToken token) {

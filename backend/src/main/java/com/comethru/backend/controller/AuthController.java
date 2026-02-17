@@ -7,7 +7,6 @@ import com.comethru.backend.service.JwtService;
 import com.comethru.backend.service.otp.TwilioService;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +25,6 @@ public class AuthController {
     private final JwtService jwtService;
     private final CookieService cookieService;
 
-    @Autowired
     public AuthController(TwilioService twilioService, JwtService jwtService, CookieService cookieService) {
         this.twilioService = twilioService;
         this.jwtService = jwtService;
