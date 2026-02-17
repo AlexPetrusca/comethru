@@ -9,7 +9,7 @@ const UnguardedRoute = ({ children }) => {
         return <div>Loading...</div>; // todo: improve
     }
 
-    if (user == null) {
+    if (isAuthenticated && user == null) {
         return <Navigate to="/create-account" replace />;
     }
 
