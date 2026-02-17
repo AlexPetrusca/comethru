@@ -4,6 +4,10 @@ spring:
       on-profile: prod
   datasource:
     jdbc: postgresql://comethru-postgresql:5432/postgres
+  cloud:
+    aws:
+      s3:
+        endpoint: http://localhost
 
 security:
   auth:
