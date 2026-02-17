@@ -2,7 +2,7 @@ import { Navigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 
 // Route where the user MUST NOT be logged-in
-const UnGuardedRoute = ({ children }) => {
+const UnguardedRoute = ({ children }) => {
     const { user, isAuthenticated, isLoading } = useAuth();
 
     if (isLoading) {
@@ -20,4 +20,4 @@ const UnGuardedRoute = ({ children }) => {
     return children;
 };
 
-export default UnGuardedRoute;
+export default UnguardedRoute;

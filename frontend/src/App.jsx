@@ -6,7 +6,7 @@ import CreateAccount from './pages/CreateAccount';
 import Profile from './pages/Profile';
 import GuardedRoute from './components/GuardedRoute.jsx';
 import './App.css';
-import UnGuardedRoute from "./components/UnGuardedRoute.jsx";
+import UnguardedRoute from "./components/UnguardedRoute.jsx";
 
 function App() {
     return (
@@ -14,9 +14,9 @@ function App() {
             <Router>
                 <Routes>
                     <Route path="/login" element={
-                        <UnGuardedRoute>
+                        <UnguardedRoute>
                             <Login />
-                        </UnGuardedRoute>
+                        </UnguardedRoute>
                     } />
 
                     <Route
