@@ -1,6 +1,6 @@
 package com.comethru.backend.entity.rest;
 
-public record UpdateProfileRequest(
+public record CreateUserRequest(
         String firstName,
         String lastName,
         String profilePicUrl

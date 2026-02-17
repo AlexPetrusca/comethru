@@ -2,7 +2,7 @@ package com.comethru.backend.controller;
 
 import com.comethru.backend.entity.User;
 import com.comethru.backend.entity.dto.UserDto;
-import com.comethru.backend.entity.rest.UpdateProfileRequest;
+import com.comethru.backend.entity.rest.CreateUserRequest;
 import com.comethru.backend.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,7 +28,7 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<UserDto> createUser(@RequestBody User user) {
-        User newUser = userService.createNew(user);
+        User newUser = userService.create(user);
         return ResponseEntity.status(HttpStatus.CREATED).body(UserDto.fromUser(newUser));
     }
 
@@ -39,10 +39,10 @@ public class UserController {
         return ResponseEntity.ok(UserDto.fromUser(user));
     }
 
-    @PutMapping("/me")
-    public ResponseEntity<User> updateMe(@RequestBody UpdateProfileRequest req, JwtAuthenticationToken token) {
+    @PostMapping("/me")
+    public ResponseEntity<User> createMe(@RequestBody CreateUserRequest req, JwtAuthenticationToken token) {
         String phoneNumber = token.getToken().getSubject();
-        User body = userService.updateUserProfile(
+        User body = userService.create(
                 phoneNumber,
                 req.firstName(),
                 req.lastName(),
