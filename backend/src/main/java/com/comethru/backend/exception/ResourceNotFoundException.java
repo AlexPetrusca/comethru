@@ -1,8 +1,10 @@
 package com.comethru.backend.exception;
 
 import com.comethru.backend.entity.types.Resource;
+import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
+@Getter
 public class ResourceNotFoundException extends BaseException {
 
     private final Resource resourceType;
@@ -17,14 +19,6 @@ public class ResourceNotFoundException extends BaseException {
         );
         this.resourceType = resourceType;
         this.resourceId = resourceId;
-    }
-
-    public Resource resourceType() {
-        return resourceType;
-    }
-
-    public Object resourceId() {
-        return resourceId;
     }
 
     public static ResourceNotFoundException resource(Resource resourceType, Object resourceId) {

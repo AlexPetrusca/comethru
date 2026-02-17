@@ -1,8 +1,11 @@
 package com.comethru.backend.exception;
 
+import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
+@Getter
 public abstract class BaseException extends RuntimeException {
+
     private final ErrorCode errorCode;
     private final HttpStatus status;
 
@@ -10,13 +13,5 @@ public abstract class BaseException extends RuntimeException {
         super(message, cause);
         this.errorCode = errorCode;
         this.status = status;
-    }
-
-    public ErrorCode getErrorCode() {
-        return errorCode;
-    }
-
-    public HttpStatus getStatus() {
-        return status;
     }
 }

@@ -4,5 +4,5 @@ public enum OtpChannel {
     SMS,
     CALL,
     WHATSAPP,
-    EMAIL;
+    EMAIL
 }

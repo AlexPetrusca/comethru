@@ -1,6 +1,10 @@
 package com.comethru.backend.exception;
 
+import lombok.Getter;
+
+@Getter
 public enum ErrorCode {
+
     // 1xxx: Validation / Not Found
     BAD_REQUEST(1000),
     RESOURCE_NOT_FOUND(1000),
@@ -20,9 +24,5 @@ public enum ErrorCode {
 
     ErrorCode(int errorCode) {
         this.errorCode = errorCode;
-    }
-
-    public int getErrorCode() {
-        return errorCode;
     }
 }
