@@ -63,9 +63,9 @@ helm upgrade --install "$RELEASE_NAME" ./comethru-chart \
 
 kubectl rollout status statefulset -l app.kubernetes.io/instance=comethru -n comethru
 
-#echo "Restarting deployments to ensure latest images are pulled..."
-#kubectl rollout restart deployment/comethru-backend -n "$NAMESPACE" 2>/dev/null || true
-#kubectl rollout status deployment/comethru-backend -n "$NAMESPACE" --timeout=300s
+echo "Restarting deployments to ensure latest images are pulled..."
+kubectl rollout restart deployment/comethru-backend -n "$NAMESPACE" 2>/dev/null || true
+kubectl rollout status deployment/comethru-backend -n "$NAMESPACE" --timeout=300s
 
 # Build and upload frontend to s3/minio
 echo "Building frontend..."
@@ -77,3 +77,6 @@ echo "Release: $RELEASE_NAME"
 echo ""
 echo "Services:"
 kubectl get svc -n "$NAMESPACE"
+echo ""
+echo "Pods:"
+kubectl get pod -n "$NAMESPACE"
