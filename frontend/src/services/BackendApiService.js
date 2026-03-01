@@ -52,7 +52,7 @@ const BackendApiService = {
 
     uploadFileToS3: async (uploadUrl, file) => {
         const response = await fetch(uploadUrl, {
-            method: 'POST',
+            method: 'PUT',
             body: file,
             headers: { 'Content-Type': file.type }
         });

@@ -182,6 +182,12 @@ prometheus:
     persistentVolume:
       enabled: false
     retention: "1d"
+  
+  extraScrapeConfigs: |
+    - job_name: 'backend'
+      metrics_path: '/actuator/prometheus'
+      static_configs:
+        - targets: ["comethru-backend:80"]
 
 grafana:
   enabled: true
