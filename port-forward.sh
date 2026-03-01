@@ -18,4 +18,4 @@ kubectl port-forward svc/comethru-minio-console 9001:9001 &
 kubectl port-forward svc/comethru-kafka 9092:9092 &
 kubectl port-forward svc/comethru-redis-master 6379:6379 &
 kubectl port-forward svc/comethru-prometheus-server 9090:80 &
-kubectl port-forward svc/comethru-grafana 3000:80
+kubectl port-forward svc/comethru-grafana 3001:80
