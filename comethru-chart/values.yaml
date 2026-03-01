@@ -142,3 +142,66 @@ kafka:
     type: ClusterIP
     ports:
       client: 9092
+
+prometheus:
+  enabled: true
+
+  alertmanager:
+    enabled: false
+
+  prometheus-pushgateway:
+    enabled: false
+
+  kube-state-metrics:
+    enabled: false
+
+  prometheus-node-exporter:
+    enabled: false
+
+  scrapeConfigs:
+    kubernetes-api-servers:
+      enabled: false
+    kubernetes-nodes:
+      enabled: false
+    kubernetes-nodes-cadvisor:
+      enabled: false
+    kubernetes-service-endpoints:
+      enabled: false
+    kubernetes-service-endpoints-slow:
+      enabled: false
+    kubernetes-pods:
+      enabled: false
+    kubernetes-pods-slow:
+      enabled: false
+    kubernetes-services:
+      enabled: false
+    prometheus-pushgateway:
+      enabled: false
+
+  server:
+    persistentVolume:
+      enabled: false
+    retention: "1d"
+
+grafana:
+  enabled: true
+
+  admin:
+    existingSecret: "comethru-grafana-secret"
+    userKey: "GRAFANA_ADMIN_USER"
+    passwordKey: "GRAFANA_ADMIN_PASSWORD"
+
+  persistence:
+    enabled: true
+    size: 200Mi
+
+  datasources:
+    datasources.yaml:
+      apiVersion: 1
+      datasources:
+        - name: Prometheus
+          type: prometheus
+          access: proxy
+          url: http://comethru-prometheus-server:80
+          isDefault: true
+          editable: true

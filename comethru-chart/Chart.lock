@@ -7,12 +7,18 @@ dependencies:
   version: 5.4.0
 - name: postgresql
   repository: https://charts.bitnami.com/bitnami
-  version: 18.3.0
+  version: 18.5.1
 - name: redis
   repository: https://charts.bitnami.com/bitnami
-  version: 25.2.0
+  version: 25.3.2
 - name: kafka
   repository: https://charts.bitnami.com/bitnami
   version: 32.4.3
-digest: sha256:25b3d993f4791671f1670bdd70ae23920bd81c0b7da5a15b9419b22069a0b95e
-generated: "2026-02-14T16:05:05.385843-08:00"
+- name: prometheus
+  repository: https://prometheus-community.github.io/helm-charts
+  version: 28.13.0
+- name: grafana
+  repository: https://grafana.github.io/helm-charts
+  version: 10.5.15
+digest: sha256:168b73325031536547e270ff3abea78057a5757c1d62955b0015d5a26a223f30
+generated: "2026-02-28T17:29:14.385346-08:00"
