@@ -60,3 +60,10 @@ management:
   metrics:
     tags:
       application: ${spring.application.name}
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui
+    enabled: true
+  api-docs:
+    enabled: true

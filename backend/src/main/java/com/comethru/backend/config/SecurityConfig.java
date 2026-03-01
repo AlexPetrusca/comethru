@@ -38,7 +38,7 @@ public class SecurityConfig {
     @Bean
     @Order(1)
     public SecurityFilterChain publicAuthChain(HttpSecurity http) {
-        http.securityMatcher("/auth/**", "/actuator/prometheus")
+        http.securityMatcher("/auth/**", "/actuator/prometheus", "/swagger-ui/**", "/v3/api-docs/**")
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth.anyRequest().permitAll()); // no auth needed
         return http.build();
