@@ -1,6 +1,7 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import {useClickOutside} from "../hooks/ClickOutside.jsx";
 import '../App.css';
 
 const TopBar = () => {
@@ -11,18 +12,17 @@ const TopBar = () => {
 
     const isFullyAuthenticated = isAuthenticated && user != null;
 
-    useEffect(() => {
-        const handleClickOutside = (event) => {
-            if (menuRef.current && !menuRef.current.contains(event.target)) {
-                setShowMenu(false);
-            }
-        };
+    useClickOutside(menuRef, () => setShowMenu(false));
 
-        document.addEventListener('mousedown', handleClickOutside);
-        return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
-        };
-    }, []);
+    const handleProfileClick = () => {
+        navigate('/profile');
+        setShowMenu(false);
+    };
+
+    const handleLogoutClick = () => {
+        logout();
+        setShowMenu(false);
+    };
 
     return (
         <div className="top-bar">
@@ -56,8 +56,8 @@ const TopBar = () => {
                         </div>
                         {showMenu && (
                             <div className="dropdown-menu">
-                                <button onClick={() => navigate('/profile')}>Profile</button>
-                                <button onClick={logout}>Logout</button>
+                                <button onClick={handleProfileClick}>Profile</button>
+                                <button onClick={handleLogoutClick}>Logout</button>
                             </div>
                         )}
                     </div>
