@@ -7,12 +7,10 @@ metadata:
     {{- include "comethru.selectorLabels" . | nindent 4 }}
 spec:
   type: {{ .Values.backend.service.type }}
-  ports:
-    - port: {{ .Values.backend.service.port }}
-      targetPort: {{ .Values.backend.service.targetPort }}
-      protocol: TCP
-      name: http
   selector:
     {{- include "comethru.selectorLabels" . | nindent 4 }}
     component: backend
+  ports:
+    - port: {{ .Values.backend.service.port }}
+      targetPort: {{ .Values.backend.service.targetPort }}
 {{- end }}

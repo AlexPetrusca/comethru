@@ -44,6 +44,8 @@ ingress:
 ingress-nginx:
   enabled: true
   controller:
+    metrics:
+      enabled: true
     service:
       type: LoadBalancer
       ports:
@@ -98,6 +100,8 @@ postgresql:
     secretKeys:
       adminPasswordKey: "POSTGRES_ADMIN_PASSWORD"
       userPasswordKey: "POSTGRES_USER_PASSWORD"
+  metrics:
+    enabled: true
   architecture: standalone
   primary:
     persistence:
@@ -114,6 +118,8 @@ redis:
     enabled: true
     existingSecret: "comethru-redis-secret"
     existingSecretPasswordKey: "REDIS_ADMIN_PASSWORD"
+  metrics:
+    enabled: true
   master:
     persistence:
       enabled: true
@@ -129,6 +135,13 @@ kafka:
     replicaCount: 1
   broker:
     replicaCount: 0
+  metrics:
+    jmx:
+      enabled: true
+      image:
+        registry: docker.io
+        repository: bitnamilegacy/jmx-exporter
+        tag: 1.4.0-debian-12-r0
   overrideConfiguration:
     advertised.listeners: "CLIENT://localhost:9092,INTERNAL://comethru-kafka-controller-0.comethru-kafka-controller-headless.comethru.svc.cluster.local:9094"
   listeners:
@@ -188,6 +201,25 @@ prometheus:
       metrics_path: '/actuator/prometheus'
       static_configs:
         - targets: ["comethru-backend:80"]
+    - job_name: 'nginx'
+      static_configs:
+        - targets: ["comethru-nginx:9113"]
+    - job_name: 'postgresql'
+      static_configs:
+        - targets: ["comethru-postgresql-metrics:9187"]
+    - job_name: 'redis'
+      static_configs:
+        - targets: ["comethru-redis-metrics:9121"]
+    - job_name: 'kafka'
+      static_configs:
+        - targets: ["comethru-kafka-jmx-metrics:5556"]
+    - job_name: 'minio'
+      metrics_path: '/minio/v2/metrics/cluster'
+      static_configs:
+        - targets: ["comethru-minio:9000"]
+    - job_name: 'ingress-nginx'
+      static_configs:
+        - targets: ["comethru-ingress-nginx-controller-metrics:10254"]
 
 grafana:
   enabled: true
