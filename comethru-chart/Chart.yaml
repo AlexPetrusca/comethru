@@ -35,3 +35,7 @@ dependencies:
     version: "10.x.x"
     repository: "https://grafana.github.io/helm-charts"
     condition: grafana.enabled
+  - name: mocker
+    version: "1.x.x"
+    repository: "oci://ghcr.io/alexpetrusca"
+    condition: mocker.enabled

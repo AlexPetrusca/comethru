@@ -27,6 +27,20 @@ backend:
     port: 80
     targetPort: 8080
 
+mocker:
+  enabled: true
+  image:
+    tag: "latest"
+    pullPolicy: Always
+  service:
+    type: ClusterIP
+    port: 8099
+    targetPort: 8090
+  h2Service:
+    type: ClusterIP
+    port: 8098
+    targetPort: 8092
+
 ingress:
   enabled: true
   className: "nginx"

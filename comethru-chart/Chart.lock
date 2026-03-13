@@ -1,13 +1,13 @@
 dependencies:
 - name: ingress-nginx
   repository: https://kubernetes.github.io/ingress-nginx
-  version: 4.14.3
+  version: 4.15.0
 - name: minio
   repository: https://charts.min.io/
   version: 5.4.0
 - name: postgresql
   repository: https://charts.bitnami.com/bitnami
-  version: 18.5.1
+  version: 18.5.6
 - name: redis
   repository: https://charts.bitnami.com/bitnami
   version: 25.3.2
@@ -20,5 +20,8 @@ dependencies:
 - name: grafana
   repository: https://grafana.github.io/helm-charts
   version: 10.5.15
-digest: sha256:168b73325031536547e270ff3abea78057a5757c1d62955b0015d5a26a223f30
-generated: "2026-02-28T17:29:14.385346-08:00"
+- name: mocker
+  repository: oci://ghcr.io/alexpetrusca
+  version: 1.0.0
+digest: sha256:30650eff5a981147a5323b3c9a6b3267a4b7d99931bf0232cdbed026c929d26b
+generated: "2026-03-12T17:30:12.239964-07:00"
